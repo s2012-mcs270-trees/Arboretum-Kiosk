@@ -2,7 +2,6 @@ package edu.gac.arboretumweb.server;
 
 import edu.gac.arboretumweb.shared.domain.Tree;
 
-//TODO: import newest google api libraries
 import com.google.gdata.client.spreadsheet.*;
 import com.google.gdata.data.Source;
 import com.google.gdata.data.spreadsheet.*;
@@ -26,9 +25,10 @@ public class TreeFinderV2 {
 		WorksheetFeed feed = treeSpreadsheetService.getFeed(treeURL,
 		        WorksheetFeed.class);
 		List<WorksheetEntry> worksheets = feed.getEntries();
-
+		
+		//TODO: no worksheets found
 		if (worksheets.size() == 0) {
-		      System.out.println("oh shit");
+		      
 		}
 		    
 		WorksheetEntry treeWorksheet = new WorksheetEntry();

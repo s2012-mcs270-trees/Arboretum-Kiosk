@@ -6,5 +6,50 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/gdata-spreadsheet-2.1"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-analytics-2.1.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-analytics-meta-2.1.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-appsforyourdomain-1.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-appsforyourdomain-meta-1.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-base-1.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-blogger-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-blogger-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-books-1.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-books-meta-1.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-calendar-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-calendar-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-client-1.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-client-meta-1.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-codesearch-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-codesearch-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-contacts-3.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-contacts-meta-3.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-core-1.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-docs-3.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-docs-meta-3.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-finance-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-finance-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-gtt-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-gtt-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-health-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-health-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-maps-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-maps-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-media-1.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-photos-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-photos-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-projecthosting-2.1.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-projecthosting-meta-2.1.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-sidewiki-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-sidewiki-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-sites-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-sites-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-spreadsheet-3.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-spreadsheet-meta-3.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-webmastertools-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-webmastertools-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-youtube-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/lib/gdata-youtube-meta-2.0.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/deps/guava-11.0.2.jar"/>
+	<classpathentry kind="lib" path="/Network/Servers/afp.gac.edu/home/l/s/lseewald/Downloads/gdata/java/deps/jsr305.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
