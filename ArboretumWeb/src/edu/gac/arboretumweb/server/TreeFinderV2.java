@@ -20,7 +20,7 @@ public class TreeFinderV2 {
 	}
 	
 	public void getTrees(ArrayList<Tree> treeList) throws AuthenticationException, MalformedURLException, IOException, ServiceException {
-		SpreadsheetService treeSpreadsheetService = new SpreadsheetService("TreeSpreadsheet");
+		SpreadsheetService treeSpreadsheetService = new SpreadsheetService("Tree Spreadsheet");
 		
 		WorksheetFeed feed = treeSpreadsheetService.getFeed(treeURL,
 		        WorksheetFeed.class);
