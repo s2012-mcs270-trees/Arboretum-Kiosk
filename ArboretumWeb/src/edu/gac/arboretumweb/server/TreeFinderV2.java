@@ -1,6 +1,6 @@
 package edu.gac.arboretumweb.server;
 
-import edu.gac.arboretumweb.shared.domain.Tree;
+import edu.gac.arboretumweb.shared.domain.*;
 
 import com.google.gdata.client.spreadsheet.*;
 import com.google.gdata.data.Source;
@@ -79,11 +79,8 @@ public class TreeFinderV2 {
 			}
 			treeList.add(tree);
 		}
-		    		
 	}
 
-		    
-	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 

@@ -24,7 +24,7 @@ public class TestGetTrees {
 		URL treeURL = new URL("https://spreadsheets.google.com/feeds/worksheets/0AjkI1jvOdpNzdEYwZEc5Zk5nbHIwdlJmSUtMaVJRT3c/public/values");
 		
 		TreeFinderV2 treeFinder = new TreeFinderV2(treeURL);
-		treeFinder.getTrees(treeList);
+		//treeFinder.getTrees(treeList);
 		
 		for (Tree tree : treeList) {
 			System.out.print(tree.getCommonName() + " " + tree.getScientificName() + " " + tree.getYearPlanted());
