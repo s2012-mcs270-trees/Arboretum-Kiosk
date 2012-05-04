@@ -1,0 +1,2 @@
+serviceClass: edu.gac.arboretumweb.client.GreetingService
+path: CA808F710EE6BFEB905A10A5264001A5.gwt.rpc
