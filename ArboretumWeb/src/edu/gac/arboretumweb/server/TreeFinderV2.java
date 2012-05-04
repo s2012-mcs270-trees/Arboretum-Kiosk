@@ -15,8 +15,13 @@ public class TreeFinderV2 {
 	
 	private URL treeURL;
 	
-	public TreeFinderV2(URL treeURL) {
-		this.treeURL = treeURL;
+	public TreeFinderV2(String treeURL) {
+		try {
+			this.treeURL = new URL(treeURL);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void getTrees(ArrayList<Tree> treeList) throws AuthenticationException, MalformedURLException, IOException, ServiceException {

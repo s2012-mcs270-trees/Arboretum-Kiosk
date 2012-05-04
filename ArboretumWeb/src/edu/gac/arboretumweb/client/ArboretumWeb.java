@@ -1,8 +1,6 @@
 package edu.gac.arboretumweb.client;
 
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -25,7 +23,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import edu.gac.arboretumweb.client.SearchResultsRetrieval.SearchType;
-import edu.gac.arboretumweb.server.TreeFinderV2;
 import edu.gac.arboretumweb.shared.FieldVerifier;
 import edu.gac.arboretumweb.shared.domain.Tree;
 
@@ -43,15 +40,9 @@ public class ArboretumWeb implements EntryPoint, ClickHandler {
 
 	public void onModuleLoad() 
 	{            
-		URL spreadSheetURL = null;
-		try {
-			spreadSheetURL = new URL("https://spreadsheets.google.com/feeds/worksheets/0AjkI1jvOdpNzdEYwZEc5Zk5nbHIwdlJmSUtMaVJRT3c/public/values");
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		final TreeFinderV2 treeFinder = new TreeFinderV2(spreadSheetURL);
+		String spreadSheetURL = "https://spreadsheets.google.com/feeds/worksheets/0AjkI1jvOdpNzdEYwZEc5Zk5nbHIwdlJmSUtMaVJRT3c/public/values";
+	
+		//final TreeFinderV2 treeFinder = new TreeFinderV2(spreadSheetURL);
 		final Button searchButton = new Button("Search");
 		searchButton.setStyleName("h1");
 		final TextBox searchField = new TextBox();

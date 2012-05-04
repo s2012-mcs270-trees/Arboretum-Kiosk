@@ -14,7 +14,7 @@
   <!-- Other module inherits                                      -->
 
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='edu.gac.arboretumweb.client.ArboretumWeb'/>
+  <entry-point class='edu.gac.arboretumweb.client.MainPage'></entry-point>
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
