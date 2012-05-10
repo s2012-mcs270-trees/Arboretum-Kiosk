@@ -2,13 +2,11 @@ package edu.gac.arboretumweb.client;
 
 import java.util.ArrayList;
 
+import edu.gac.arboretumweb.client.SearchParameter.SearchType;
 import edu.gac.arboretumweb.shared.domain.Tree;
  
 public interface SearchResultsRetrieval
 {
-    enum SearchType{
-        commonName, scientificName, yearDonated, donatedFor;
-    }
     /**
      * This provides an interface for the UI to retrieve the search results 
      * from the database given a certain search word and type

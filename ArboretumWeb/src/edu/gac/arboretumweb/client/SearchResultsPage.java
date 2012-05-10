@@ -6,6 +6,8 @@ import java.util.Comparator;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
@@ -20,9 +22,15 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 
+import edu.gac.arboretumweb.client.SearchParameter.Quadrant;
+import edu.gac.arboretumweb.client.SearchParameter.SearchFor;
+import edu.gac.arboretumweb.client.SearchParameter.SearchType;
 import edu.gac.arboretumweb.shared.domain.Tree;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 
-public class SearchResultsPage implements EntryPoint
+public class SearchResultsPage implements EntryPoint, Page
 {
 	/**
 	 * The main DataGrid.
@@ -36,11 +44,48 @@ public class SearchResultsPage implements EntryPoint
 	@UiField(provided = true)
 	SimplePager pager;
 	
+	private RootPanel rootPanel = RootPanel.get();
+	private AbsolutePanel absolutePanel = new AbsolutePanel();
+		
+	CheckBox checkBoxTrees = new CheckBox("Trees");
+	CheckBox checkBoxBenches = new CheckBox("Benches");
+	CheckBox checkBoxBricks = new CheckBox("Bricks");
+    CheckBox checkBoxQuadrantA = new CheckBox("A");
+    CheckBox checkBoxQuadrantB = new CheckBox("B");
+    CheckBox checkBoxQuadrantC = new CheckBox("C");
+    CheckBox checkBoxQuadrantD = new CheckBox("D");
+    
+	ListBox byListBox = new ListBox();
+	
+	Label searchResultsLabel = new Label("Search Results for: ");
+	Label inLabel = new Label("In:");
+	Label byLabel = new Label("By:");
+	Label locatedInQuadrantLabel = new Label("Located in Quadrant:");
+	Label donatedBetweenLabel = new Label("Donated Between:");
+	Label andLabel = new Label("AND");
+	
+	TextBox earliestSearchYearTextBox = new TextBox();
+	TextBox latestSearchYearTextBox = new TextBox();
+	TextBox searchKeywordsTextBox = new TextBox();
+	
+	Button updateSearchButton = new Button("UPDATE SEARCH CRITERIA");
+	Button backButton = new Button("BACK");
+	
 	@Override
 	/**
 	 * @wbp.parser.entryPoint
 	 */
 	public void onModuleLoad() 
+	{
+		//This method of calling calling the page is used only for debugging purposes.  The SearchResultsPage will actually
+		//be instantiated by the PageController which will also be responsible for opening it when necessary
+		ArrayList<SearchFor> searchForParams = new ArrayList<SearchFor>();
+		searchForParams.add(SearchFor.trees);
+		SearchParameter searchParameter = new SearchParameter("Grandpa Jo", searchForParams, SearchType.commonName, Quadrant.C, 1862, 2012);
+		this.show(searchParameter);
+	}
+
+	public void show(final SearchParameter searchParameter) 
 	{
 		ArrayList<Tree> sampleTreelist = new ArrayList<Tree>();
 		for (int i = 0; i < 100; i++)
@@ -59,165 +104,220 @@ public class SearchResultsPage implements EntryPoint
 			sampleTreelist.add(newTree);
 		}
 		
-		RootPanel rootPanel = RootPanel.get();
-		rootPanel.setWidth("1200");
-		rootPanel.add(dataGrid, 10, 220);
-		dataGrid.setSize("649px", "308px");
-		dataGrid.setWidth("100%");
-		
-		// Attach a column sort handler to the ListDataProvider to sort the list of each column 
-		// as needed (copied from example code) (not working)
-		// TODO: get the sorter to work or erase the code for it if deemed not essential
-	    ListHandler<Tree> sortHandler =
-	        new ListHandler<Tree>(sampleTreelist);
+		rootPanel.setSize("1200", "900");
+		rootPanel.add(absolutePanel, 0, 0);
+	    absolutePanel.setSize("1062px", "1001px");
+	    
+	    absolutePanel.add(dataGrid, 0, 173);
+	    dataGrid.setSize("1040px", "308px");
+	    
+	    //adding the items to the listBox 
+	    byListBox.addItem("Donated For");
+	    byListBox.addItem("Common Name");
+	    byListBox.addItem("Scientific Name");
+	    byListBox.setSize("192px", "74px");
+	    byListBox.setVisibleItemCount(1);
+	    absolutePanel.add(byListBox, 46, 83);
+	    
+	    //adding all the checkBoxes to the panel
+	    absolutePanel.add(checkBoxTrees, 46, 52);
+	    checkBoxTrees.setSize("67px", "20px");
+	    absolutePanel.add(checkBoxBenches, 112, 52);
+	    checkBoxBenches.setSize("83px", "20px");
+	    absolutePanel.add(checkBoxBricks, 191, 52);
+	    checkBoxBricks.setSize("83px", "20px");
+	    
+	    //adding the quadrants to the panel
+	    absolutePanel.add(checkBoxQuadrantA, 528, 10);
+	    checkBoxQuadrantA.setSize("36px", "20px");
+	    absolutePanel.add(checkBoxQuadrantB, 570, 10);
+	    checkBoxQuadrantB.setSize("36px", "20px");
+	    absolutePanel.add(checkBoxQuadrantC, 611, 10);
+	    checkBoxQuadrantC.setSize("36px", "20px");
+	    absolutePanel.add(checkBoxQuadrantD, 653, 10);
+	    checkBoxQuadrantD.setSize("36px", "20px");
+	    
+	    //adding all the labels to the panel
+	    absolutePanel.add(searchResultsLabel, 24, 10);
+	    absolutePanel.add(inLabel, 24, 52);
+	    inLabel.setSize("14px", "24px");
+	    absolutePanel.add(byLabel, 20, 84);
+	    byLabel.setSize("20px", "24px");
+	    absolutePanel.add(locatedInQuadrantLabel, 401, 10);
+	    locatedInQuadrantLabel.setSize("121px", "24px");
+	    absolutePanel.add(donatedBetweenLabel, 401, 52);
+	    absolutePanel.add(andLabel, 600, 50);
+	    
+	    //adding all the text boxes to the panel
+	    absolutePanel.add(earliestSearchYearTextBox, 528, 45);
+	    earliestSearchYearTextBox.setSize("57px", "18px");
+	    earliestSearchYearTextBox.setText(String.valueOf(searchParameter.getLowBoundDonatedYear()));
+	    absolutePanel.add(latestSearchYearTextBox, 649, 46);
+	    latestSearchYearTextBox.setSize("57px", "18px");
+	    latestSearchYearTextBox.setText(String.valueOf(searchParameter.getHighBoundDonatedYear()));
+	    absolutePanel.add(searchKeywordsTextBox, 149, 10);
+	    searchKeywordsTextBox.setSize("222px", "12px");
+	    searchKeywordsTextBox.setText(searchParameter.getKeywordQuery());
+	    
+	    //setting the initial value enabled by the the byListBox based on the searchParameter
+	    if(searchParameter.getSearchType() == SearchType.donatedFor)
+	    	byListBox.setItemSelected(0, true);
+	    if(searchParameter.getSearchType() == SearchType.commonName)
+	    	byListBox.setItemSelected(1, true);
+	    if(searchParameter.getSearchType() == SearchType.scientificName)
+	    	byListBox.setItemSelected(2, true);
+	    
+	    //setting which of the Tree/Bench/Brick check boxes are checked base on the searchParameter
+	    if(searchParameter.getSearchForParams().contains(SearchFor.trees))
+	    	checkBoxTrees.setValue(true);
+	    if(searchParameter.getSearchForParams().contains(SearchFor.benches))
+	    	checkBoxBenches.setValue(true);
+	    if(searchParameter.getSearchForParams().contains(SearchFor.bricks))
+	    	checkBoxBricks.setValue(true);
+	    
+	    //setting which of the Quadrant check boxes are checked base on the searchParameter
+	    if(searchParameter.getQuadrant() == Quadrant.A)
+	    	checkBoxQuadrantA.setValue(true);
+	    if(searchParameter.getQuadrant() == Quadrant.B)
+	    	checkBoxQuadrantB.setValue(true);
+	    if(searchParameter.getQuadrant() == Quadrant.C)
+	    	checkBoxQuadrantC.setValue(true);
+	    if(searchParameter.getQuadrant() == Quadrant.D)
+	    	checkBoxQuadrantD.setValue(true);
+
+	    // Attach a column sort handler to the ListDataProvider to sort the list of each column 
+	    // of the dataGrid as needed (copied from example code) (not working)
+	    // TODO: get the sorter to work or erase the code for it if deemed not essential
+	    ListHandler<Tree> sortHandler = new ListHandler<Tree>(sampleTreelist);
 	    dataGrid.addColumnSortHandler(sortHandler);
-		
-		//The following lines instantiate Column objects that will be added to the DataGrid
-		Column<Tree, String> commonNameColumn = new Column<Tree, String>(new TextCell())
-		{
-			@Override
-			public String getValue(Tree tree)
-			{
-				return tree.getCommonName();
-			}
-		};
-		//Set up the sorter for the column
-		commonNameColumn.setSortable(true);
+	    
+	    //The following lines instantiate Column objects that will be added to the DataGrid
+	    Column<Tree, String> commonNameColumn = new Column<Tree, String>(new TextCell())
+	    {
+	    	@Override
+	    	public String getValue(Tree tree)
+	    	{
+	    		return tree.getCommonName();
+	    	}
+	    };
+	    //Set up the sorter for the column
+	    commonNameColumn.setSortable(true);
 	    sortHandler.setComparator(commonNameColumn, new Comparator<Tree>() {
 	      public int compare(Tree tree1, Tree tree2) {
 	        return tree1.getCommonName().compareTo(tree2.getCommonName());
 	      }
 	    });
-		
-		Column<Tree, String> scientificNameColumn = new Column<Tree, String>(new TextCell())
-		{
-			@Override
-			public String getValue(Tree tree)
+	    
+	    Column<Tree, String> scientificNameColumn = new Column<Tree, String>(new TextCell())
+	    {
+	    	@Override
+	    	public String getValue(Tree tree)
+	    	{
+	    		return tree.getScientificName();
+	    	}
+	    };
+	    
+	    Column<Tree, String> donatedForColumn = new Column<Tree, String>(new TextCell())
+	    {
+	    	@Override
+	    	public String getValue(Tree tree)
+	    	{
+	    		return tree.getDonatedFor();
+	    	}
+	    };
+	    
+	    Column<Tree, String> yearDonatedColumn = new Column<Tree, String>(new TextCell())
+	    {
+	    	@Override
+	    	public String getValue(Tree tree)
+	    	{
+	    		return tree.getYearDonated();
+	    	}
+	    };
+	    //Set up the sorter for the column
+	    yearDonatedColumn.setSortable(true);
+	    sortHandler.setComparator(yearDonatedColumn, new Comparator<Tree>() {
+	    	public int compare(Tree tree1, Tree tree2) {
+	    		return tree1.getYearDonated().compareTo(tree2.getYearDonated());
+	    	}
+	    });
+	    
+	    //Add the previously created columns to the grid
+	    dataGrid.addColumn(commonNameColumn, "Common Name");
+	    dataGrid.addColumn(scientificNameColumn, "Scientific Name");
+	    dataGrid.addColumn(donatedForColumn, "Donated For");
+	    dataGrid.addColumn(yearDonatedColumn, "Year Donated");
+
+	    //The dataGrid was instantiated with it's generic type "Tree", thus it's row data must consist of an ArrayList of Trees
+	    dataGrid.setRowData(sampleTreelist);
+
+	    //documentation says this isn't mandatory but is suggested
+	    dataGrid.setRowCount(sampleTreelist.size());
+
+	    //this is displayed when the user hovers the mouse over the gridTable
+	    dataGrid.setTitle("Search Results");
+
+	    // This sets how many results should be displayed on one page.  Currently, it limits how many results 
+	    // will be shown in the grid and ignore all other results.  For example, the mock ArrayList<Tree> sampleTreelist
+	    // contains 100 objects, but only 50 are displayed in the table, and there is no way to see the other 50
+	    // TODO: fix the problem above (this could be done by getting the paging to work, otherwise we will have to 
+	    // go with scrolling
+	    dataGrid.setPageSize(50);
+	    
+	    //not sure what this does
+	    //pager.setDisplay(dataGrid);
+	    
+	    absolutePanel.add(updateSearchButton, 839, 24);
+	    updateSearchButton.setSize("173px", "81px");
+	    //Add the association  ClickHandler to the updateSearchButton
+	    updateSearchButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) 
 			{
-				return tree.getScientificName();
-			}
-		};
-		
-		Column<Tree, String> donatedForColumn = new Column<Tree, String>(new TextCell())
-		{
-			@Override
-			public String getValue(Tree tree)
-			{
-				return tree.getDonatedFor();
-			}
-		};
-		
-		Column<Tree, String> yearDonatedColumn = new Column<Tree, String>(new TextCell())
-		{
-			@Override
-			public String getValue(Tree tree)
-			{
-				return tree.getYearDonated();
-			}
-		};
-		//Set up the sorter for the column
-		yearDonatedColumn.setSortable(true);
-		sortHandler.setComparator(yearDonatedColumn, new Comparator<Tree>() {
-			public int compare(Tree tree1, Tree tree2) {
-				return tree1.getYearDonated().compareTo(tree2.getYearDonated());
+				//TODO: check to make sure the current configuration is acceptable and searchable
+				// this could be done in realtime by displaying some red text when the current configuration is not correct
+				// or it could be checked when this method is run then told to the user by displaying a window
+    			ArrayList<SearchFor> searchForParams = new ArrayList<SearchFor>();
+    			
+    			if(searchParameter.getSearchForParams().contains(SearchFor.trees))
+    		    	searchForParams.add(SearchFor.trees);
+    		    if(searchParameter.getSearchForParams().contains(SearchFor.benches))
+    		    	searchForParams.add(SearchFor.benches);
+    		    if(searchParameter.getSearchForParams().contains(SearchFor.bricks))
+    		    	searchForParams.add(SearchFor.bricks);
+    			
+    		    SearchType searchType = SearchType.commonName;
+    		    
+    		    if(searchParameter.getSearchType() == SearchType.donatedFor)
+    		    	searchType = SearchType.donatedFor;
+    		    if(searchParameter.getSearchType() == SearchType.commonName)
+    		    	searchType = SearchType.commonName;
+    		    if(searchParameter.getSearchType() == SearchType.scientificName)
+    		    	searchType = SearchType.scientificName;
+    		    
+    			SearchParameter newParam = new SearchParameter(searchKeywordsTextBox.getText(), 
+    					searchForParams, 
+    					searchType, 
+    					Quadrant.D, //TODO: this will have to be changed once the SearchParameter class is changed to take a List of Quadrants 
+    					Integer.parseInt(earliestSearchYearTextBox.getText()), //TODO: catch these two parses if input is incorrect
+    					Integer.parseInt(latestSearchYearTextBox.getText()));
+    			PageController.sharedPageController().showSearchResultsPage(newParam);
 			}
 		});
-
-		//Add the previously created columns to the grid
-		dataGrid.addColumn(commonNameColumn, "Common Name");
-		dataGrid.addColumn(scientificNameColumn, "Scientific Name");
-		dataGrid.addColumn(donatedForColumn, "Donated For");
-		dataGrid.addColumn(yearDonatedColumn, "Year Donated");
-		
-		//The dataGrid was instantiated with it's generic type "Tree", thus it's row data must consist of an ArrayList of Trees
-		dataGrid.setRowData(sampleTreelist);
-		
-		//documentation says this isn't mandatory but is suggested
-		dataGrid.setRowCount(sampleTreelist.size());
-		
-		//this is displayed when the user hovers the mouse over the gridTable
-		dataGrid.setTitle("Search Results");
-		
-		// This sets how many results should be displayed on one page.  Currently, it limits how many results 
-		// will be shown in the grid and ignore all other results.  For example, the mock ArrayList<Tree> sampleTreelist
-		// contains 100 objects, but only 50 are displayed in the table, and there is no way to see the other 50
-		// TODO: fix the problem above (this could be done by getting the paging to work, otherwise we will have to 
-		// go with scrolling
-		dataGrid.setPageSize(50);
-		
-		// Create a Pager to control the table.  This came straight from the example
-		// I followed. I don't believe it adds any functionality to our project at all.
-		// However, I kept it hoping that it was somehow responsible for paging our results
-		SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
-	    pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
-	    pager.setDisplay(dataGrid);
-	    pager.setVisible(true);
 	    
+	    absolutePanel.add(backButton, 839, 494);
+	    backButton.setSize("173px", "81px");
+	    backButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event)
+			{
+				rootPanel.clear();
+    			PageController.sharedPageController().showMainPage();
+			}
+		});
+	    	    	    
 	    // Add a selection model to handle the user clicking or touching a row selection 
 	    // (corresponding to a tree being selected, 'selectedTree')
 	    final SingleSelectionModel<Tree> selectionModel = new SingleSelectionModel<Tree>();
 	    dataGrid.setSelectionModel(selectionModel);
-	    
-	    Label searchResultsLabel = new Label("Search Results for: ");
-	    rootPanel.add(searchResultsLabel, 86, 20);
-	    
-	    Label inLabel = new Label("In:");
-	    rootPanel.add(inLabel, 184, 57);
-	    inLabel.setSize("14px", "24px");
-	    
-	    Label byLabel = new Label("By:");
-	    rootPanel.add(byLabel, 184, 87);
-	    byLabel.setSize("20px", "24px");
-	    
-	    Label locatedInQuadrantLabel = new Label("Located in Quadrant:");
-	    rootPanel.add(locatedInQuadrantLabel, 77, 117);
-	    locatedInQuadrantLabel.setSize("121px", "24px");
-	    
-	    Label label = new Label("");
-	    rootPanel.add(label, 142, 93);
-	    
-	    Label donatedBetweenLabel = new Label("Donated Between:");
-	    rootPanel.add(donatedBetweenLabel, 92, 147);
-	    
-	    TextBox earliestSearchYearTextBox = new TextBox();
-	    rootPanel.add(earliestSearchYearTextBox, 202, 147);
-	    earliestSearchYearTextBox.setSize("57px", "6px");
-	    
-	    Label andLabel = new Label("AND");
-	    rootPanel.add(andLabel, 275, 147);
-	    
-	    TextBox latestSearchYearTextBox = new TextBox();
-	    rootPanel.add(latestSearchYearTextBox, 308, 147);
-	    latestSearchYearTextBox.setSize("57px", "6px");
-	    
-	    TextBox searchKeywordsTextBox = new TextBox();
-	    rootPanel.add(searchKeywordsTextBox, 204, 10);
-	    searchKeywordsTextBox.setSize("222px", "12px");
-	    
-	    ListBox inListBox = new ListBox();
-	    inListBox.addItem("Trees", "Trees");
-	    inListBox.addItem("Benches", "Benches");
-	    inListBox.addItem("Stones", "Stones");
-	    rootPanel.add(inListBox, 204, 53);
-	    inListBox.setSize("171px", "22px");
-	    inListBox.setVisibleItemCount(1);
-	    
-	    ListBox byListBox = new ListBox();
-	    byListBox.addItem("Donated For");
-	    byListBox.addItem("Common Name");
-	    byListBox.addItem("Scientific Name");
-	    rootPanel.add(byListBox, 204, 85);
-	    byListBox.setSize("171px", "22px");
-	    byListBox.setVisibleItemCount(1);
-	    
-	    ListBox quadrantListBox = new ListBox();
-	    quadrantListBox.addItem("A", "A");
-	    quadrantListBox.addItem("B", "B");
-	    quadrantListBox.addItem("C", "C");
-	    quadrantListBox.addItem("D", "D");
-	    rootPanel.add(quadrantListBox, 204, 115);
-	    quadrantListBox.setSize("171px", "22px");
-	    quadrantListBox.setVisibleItemCount(1);
 	    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() 
 	    {
 	    	public void onSelectionChange(SelectionChangeEvent event) 
@@ -225,16 +325,31 @@ public class SearchResultsPage implements EntryPoint
 	    		Tree selectedTree = selectionModel.getSelectedObject();
 	    		if (selectedTree != null) 
 	    		{
-	    			Window.alert("You selected: " + selectedTree.getCommonName());
-	    			//TODO: implement this event to go the the page of the selectedTree
+	    			rootPanel.clear();
+	    			PageController.sharedPageController().showTreePage(selectedTree, searchParameter);
 	    		}
 	    	}
 	    });
 	    
+	    // Create a Pager to control the table.  This came straight from the example
+	    // I followed. I don't believe it adds any functionality to our project at all.
+	    // However, I kept it hoping that it was somehow responsible for paging our results
+	    SimplePager.Resources pagerResources = GWT.create(SimplePager.Resources.class);
+	    pager = new SimplePager(TextLocation.CENTER, pagerResources, false, 0, true);
+	    pager.setVisible(true);
+	    
 	    // TODO: have Tim add a map somewhere on this results page with stars showing where the trees that were hits to the 
 	    // search
-	    
-	    // TODO: implement a way to see exactly what the search parameters were that were used to generate the search.  I didn't 
-	    // implement this since we haven't implemented a page handler for the different pages required for the project
+	}
+
+	@Override
+	public void close() 
+	{		
+		rootPanel.clear();
+	}
+	
+	@Override
+	public void reload(){
+		rootPanel.setVisible(true);
 	}
 }

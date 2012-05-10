@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import edu.gac.arboretumweb.client.SearchResultsRetrieval.SearchType;
+import edu.gac.arboretumweb.client.SearchParameter.SearchType;
 import edu.gac.arboretumweb.shared.FieldVerifier;
 import edu.gac.arboretumweb.shared.domain.Tree;
 

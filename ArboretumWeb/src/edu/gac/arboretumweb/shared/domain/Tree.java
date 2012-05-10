@@ -12,8 +12,19 @@ public class Tree {
     private String donatedFor;
     private String donatedBy;
     
-    public Tree() {
-        
+    //default constructor for debugging and to ensure that all trees created have specified fields
+    public Tree() 
+    {
+    	commonName = "White Oak";
+    	scientificName = "Quercus alba";
+    	yearPlanted = "1999";
+    	yearDonated = "2004";
+    	health = "good";
+    	longitude = "93.9578";
+    	latitude = "44.3236";
+    	diameter = "2.2";
+    	donatedFor = "Mark Johnson";
+    	donatedBy = "Cindy Johnson";
     }
     
     public static void main(String[] args) {

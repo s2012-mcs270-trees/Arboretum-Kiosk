@@ -1,231 +1,325 @@
 package edu.gac.arboretumweb.client;
 
-import edu.gac.arboretumweb.client.SearchResultsRetrieval.SearchType;
-import edu.gac.arboretumweb.shared.FieldVerifier;
+import java.util.ArrayList;
+import edu.gac.arboretumweb.client.SearchParameter.Quadrant;
+import edu.gac.arboretumweb.client.SearchParameter.SearchFor;
+import edu.gac.arboretumweb.client.SearchParameter.SearchType;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.cellview.client.DataGrid;
-import com.google.gwt.user.cellview.client.SimplePager;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-
-import edu.gac.arboretumweb.shared.domain.Tree;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
+ * This is the page that loads when the application is started.  It is responsible for taking in parameters for a search which consist of 
+ * String query - the search text
+ * ArrayList<SearchFor> - the list of Benches, Bricks, and/or Trees which specifies what the search is looking for
+ * SearchType - the value (i.e. "Common Name", "Donated For", etc. that the search is applying the query string to search for
+ * Donated between two integer years - lowerLimit and upperLimit
+ * ArrayList<Quadrant> - A, B, C, D defined by the map that shows on the mainPage
  */
-public class MainPage implements EntryPoint, ClickHandler {
-	/**
-	 * The message displayed to the user when the server cannot be reached or
-	 * returns an error.
-	 */
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
-
+public class MainPage implements EntryPoint, ClickHandler, Page {
+	
+	//All variable are declared above the show method to make reading the code easier
+	
+	RootPanel rootPanel = RootPanel.get();
+	AbsolutePanel absolutePanel = new AbsolutePanel();
+	
+	final String INCONSISTENT_SEARCH_CRITERIA = "Inconsistent Search Criteria";
+	//TODO: once it is determined exactly what criteria is searchable, update this string so that if it were 
+	// ever encountered, the user could see the rules for the criteria and determine what is wrong in their
+	// search
+	
+	//any variables that must be referenced inside a handler must be declared final
+	final RadioButton commonNameSearchTypeRadioButton = new RadioButton("Search Type", "Common Name");
+	final RadioButton sizeSearchTypeRadioButton = new RadioButton("Search Type", "Size");
+	final RadioButton donatedForSearchTypeRadioButton = new RadioButton("Search Type", "Donated For");
+	final RadioButton scientificNameSearchTypeRadioButton = new RadioButton("Search Type", "Scientific Name");
+	
+	final CheckBox checkBoxBenches = new CheckBox("Benches");
+	final CheckBox checkBoxTrees = new CheckBox("Trees");
+	final CheckBox checkBoxBricks = new CheckBox("Bricks");
+	private final CheckBox checkBoxNotYetDonated = new CheckBox("Bricks");
+	
+	final TextBox searchField = new TextBox();
+	final TextBox lowerLimitYearDonatedTextBox = new TextBox();
+	final TextBox upperLimitYearDonatedTextBox = new TextBox();
+	
+	Label labelIn = new InlineLabel("In");
+	Label labelBy = new InlineLabel("By");
+	Label labelQuery = new InlineLabel("Query");
+	Label labelHeader = new InlineLabel("Welcome to the Gustavus Adolphus College Arboretum Tree Search Application!");
+	Label labelDonatedBetween = new Label("Donated Between");
+	Label labelAnd = new Label("and");
+	
+	Button searchButton = new Button("Search");
+	
 	public void onModuleLoad() 
-	{           
-		//final TreeFinder treeFinder = new TreeFinder();
-		final Button searchButton = new Button("Search");
-		searchButton.setStyleName("h1");
-		final TextBox searchField = new TextBox();
-		searchField.setText("search for");
-		final Label errorLabel = new Label();
-		
-		// We can add style names to widgets
-		searchButton.addStyleName("searchButton");
+	{
+		//This method of calling calling the page is used only for debugging purposes.  The SearchResultsPage will actually
+		//be instantiated by the PageController which will also be responsible for opening it when necessary
+		this.show();
+	}
 
+	//not sure what this is for
+	@Override
+	public void onClick(ClickEvent event) {
+		// TODO Auto-generated method stub
+	}
+
+	public void show() 
+	{
 		// Add the nameField and sendButton to the RootPanel
 		// Use RootPanel.get() to get the entire body element
-		RootPanel rootPanel = RootPanel.get();
 		rootPanel.setSize("1600", "900");
 		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE);
-		rootPanel.add(searchField, 258, 194);
-		
-		RootPanel.get("sendButtonContainer").add(searchButton, 768, 335);
-		searchButton.setSize("134px", "56px");
-		RootPanel.get("errorLabelContainer").add(errorLabel);
+		rootPanel.add(absolutePanel, 0, 0);
+		absolutePanel.setSize("962px", "636px");
 
-		// Focus the cursor on the search field when the app loads
-		searchField.setFocus(true);
+		//set the default text that will appear in the searchField
+		searchField.setText("search");
 		
-		//Creates the check boxes for either trees or benches
-		//TODO make this exandable to an arbitrary number of "type" based on the number of 
-		//sheets in the google docs spread sheet.  After this is done, the GetResults... method will
-		//have to be updated
-		CheckBox checkBoxTrees = new CheckBox("Trees");
-		rootPanel.add(checkBoxTrees, 454, 194);
-		
-		CheckBox checkBoxBenches = new CheckBox("Benches");
-		rootPanel.add(checkBoxBenches, 454, 245);
-		
-		//Creates the radio buttons for the search type (i.e. "Donor", "Common Name", "Scientific Name", etc. 
-		
-		final RadioButton commonNameSearchTypeRadioButton = new RadioButton("Search Type", "Common Name");
-		rootPanel.add(commonNameSearchTypeRadioButton, 548, 220);
-		
-		final RadioButton scientificNameSearchTypeRadioButton = new RadioButton("Search Type", "Scientific Name");
-		rootPanel.add(scientificNameSearchTypeRadioButton, 548, 245);
-		
-		final RadioButton donatedForSearchTypeRadioButton = new RadioButton("Search Type", "Donated For");
-		rootPanel.add(donatedForSearchTypeRadioButton, 548, 194);
-		
-		//Sets up the inline labels for "In", "By", and "Query" that go above the appropriate
-		//search criteria
-		InlineLabel inInlineLabel = new InlineLabel("In");
-		inInlineLabel.setStyleName("sendButton");
-		rootPanel.add(inInlineLabel, 454, 160);
-		
-		InlineLabel byInlineLabel = new InlineLabel("By");
-		byInlineLabel.setStyleName("sendButton");
-		rootPanel.add(byInlineLabel, 548, 160);
-		
-		InlineLabel queryInlineLabel = new InlineLabel("Query");
-		queryInlineLabel.setStyleName("sendButton");
-		rootPanel.add(queryInlineLabel, 258, 160);
-		
-		InlineLabel headerInlinelabel = new InlineLabel("Welcome to the Gustavus Adolphus College Arboretum Tree Search Application!");
-		headerInlinelabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		headerInlinelabel.setStyleName("sendButton");
-		rootPanel.add(headerInlinelabel, 258, 30);
-		headerInlinelabel.setSize("532px", "50px");
-		
-		TextBox textBox = new TextBox();
-		textBox.setStyleName("h1");
-		textBox.setText("1851");
-		rootPanel.add(textBox, 454, 361);
-		textBox.setSize("109px", "18px");
-		
-		TextBox textBox_1 = new TextBox();
-		textBox_1.setText("2012");
-		rootPanel.add(textBox_1, 624, 361);
-		textBox_1.setSize("118px", "18px");
-		
-		Label lblAnd = new Label("and");
-		lblAnd.setStyleName("sendButton");
-		rootPanel.add(lblAnd, 579, 361);
-		lblAnd.setSize("61px", "34px");
-		
-		Label lblDonatedBetween = new Label("Donated Between");
-		lblDonatedBetween.setStyleName("sendButton");
-		rootPanel.add(lblDonatedBetween, 258, 361);
-		lblDonatedBetween.setSize("173px", "30px");
-	    
-		// Create the popup dialog box
-		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setText("Remote Procedure Call");
-		dialogBox.setAnimationEnabled(true);
-		final Button closeButton = new Button("Close");
-		// We can set the id of a widget by accessing its Element
-		closeButton.getElement().setId("closeButton");
-		final Label textToServerLabel = new Label();
-		final HTML serverResponseLabel = new HTML();
-		VerticalPanel dialogVPanel = new VerticalPanel();
-		dialogVPanel.addStyleName("dialogVPanel");
-		dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
-		dialogVPanel.add(textToServerLabel);
-		dialogVPanel.add(new HTML("<br><b>Server replies:</b>"));
-		dialogVPanel.add(serverResponseLabel);
-		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-		dialogVPanel.add(closeButton);
-		dialogBox.setWidget(dialogVPanel);
-
-		rootPanel.getElement().getStyle().setPosition(Position.RELATIVE);
-		
-		// Add a handler to close the DialogBox
-		closeButton.addClickHandler(new ClickHandler() {
+		//Adds the radio buttons to the absolutePanel (i.e. "Donor", "Common Name", "Scientific Name", etc. 
+		absolutePanel.add(commonNameSearchTypeRadioButton, 492, 244);
+		absolutePanel.add(sizeSearchTypeRadioButton, 492, 218);
+		sizeSearchTypeRadioButton.setSize("113px", "20px");
+		absolutePanel.add(donatedForSearchTypeRadioButton, 492, 192);
+		absolutePanel.add(scientificNameSearchTypeRadioButton, 492, 270);
+		checkBoxTrees.setStyleName("h1");
+		absolutePanel.add(checkBoxTrees, 337, 192);
+				
+		//add a click handler so that when the Bricks checkBox is checked/unchecked, the corresponding
+		//radioButtons that can/can't be selected are enabled or disabled.  For example, if someone
+		//wants to search for bricks, the radioButton they select can't be search by "Common Name"
+		//TODO: make organize these better.  There need only be one private method that checks all
+		// 8 possible scenarios and handles each case appropriately
+		checkBoxBricks.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				dialogBox.hide();
-				searchButton.setEnabled(true);
-				searchButton.setFocus(true);
+				if(checkBoxBricks.getValue())//Brick checkBox was enabled
+				{
+					commonNameSearchTypeRadioButton.setEnabled(false);
+					scientificNameSearchTypeRadioButton.setEnabled(false);
+					
+					if(!checkBoxTrees.getValue() && !checkBoxBenches.getValue())
+						sizeSearchTypeRadioButton.setEnabled(true);
+				}
+				else//brick checkBox was disabled
+				{
+					if(checkBoxTrees.getValue() && !checkBoxBenches.getValue())
+					{
+						commonNameSearchTypeRadioButton.setEnabled(true);
+						scientificNameSearchTypeRadioButton.setEnabled(true);
+					}
+				}
 			}
 		});
+		
+		absolutePanel.add(checkBoxBricks, 337, 244);
+		checkBoxBricks.setSize("71px", "20px");
+		
+		//Again, add the click handler
+		checkBoxBenches.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(checkBoxBenches.getValue())//if it is checked, be sure that commonName and scientific name and size are not searchable
+				{
+					commonNameSearchTypeRadioButton.setEnabled(false);
+					scientificNameSearchTypeRadioButton.setEnabled(false);
+					sizeSearchTypeRadioButton.setEnabled(false);
+				}
+				else//benches check button was unchecked by the event
+				{
+					if(checkBoxTrees.getValue() && !checkBoxBricks.getValue())//trees is checked but not bricks
+					{
+						commonNameSearchTypeRadioButton.setEnabled(true);
+						scientificNameSearchTypeRadioButton.setEnabled(true);
+						sizeSearchTypeRadioButton.setEnabled(false);
+					}
+					else if(!checkBoxTrees.getValue() && checkBoxBricks.getValue())//bricks are checked by not trees
+					{
+						commonNameSearchTypeRadioButton.setEnabled(false);
+						scientificNameSearchTypeRadioButton.setEnabled(false);
+						sizeSearchTypeRadioButton.setEnabled(true);
+					}
+					else if(checkBoxTrees.getValue() && checkBoxBricks.getValue())//both are checked
+					{
+						sizeSearchTypeRadioButton.setEnabled(false);
+						commonNameSearchTypeRadioButton.setEnabled(false);
+						scientificNameSearchTypeRadioButton.setEnabled(false);
+					}
+				}
+			}
+		});
+		
+		checkBoxTrees.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(checkBoxTrees.getValue())//if it is checked, we will not allow a search by size (available for bricks only)
+				{
+					sizeSearchTypeRadioButton.setEnabled(false);
+					if(!checkBoxBenches.getValue() && ! checkBoxBricks.getValue())
+					{
+						commonNameSearchTypeRadioButton.setEnabled(true);
+						scientificNameSearchTypeRadioButton.setEnabled(true);
+					}
+				}
+				else
+				{
+					if(checkBoxBenches.getValue())//common Name, scientific name and size are all not searchable if benches is checked
+					{
+						commonNameSearchTypeRadioButton.setEnabled(false);
+						scientificNameSearchTypeRadioButton.setEnabled(false);
+						sizeSearchTypeRadioButton.setEnabled(false);
+					}
+					else if(checkBoxBricks.getValue())//neither benches nor trees are checks
+						sizeSearchTypeRadioButton.setEnabled(true);
+					
+				}
+			}
+		});
+		absolutePanel.add(checkBoxBenches, 337, 218);
+		
+		checkBoxNotYetDonated.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(checkBoxNotYetDonated.getValue())
+				{
+					donatedForSearchTypeRadioButton.setEnabled(false);
+					if(donatedForSearchTypeRadioButton.getValue())
+						donatedForSearchTypeRadioButton.setValue(false);
+				}
+					
+				if(!checkBoxNotYetDonated.getValue())
+					donatedForSearchTypeRadioButton.setEnabled(true);
+			}
+		});
+		checkBoxNotYetDonated.setHTML("Not Yet Donated");
+		absolutePanel.add(checkBoxNotYetDonated, 618, 192);
+		checkBoxNotYetDonated.setSize("136px", "20px");
 
+		//Sets up the labels for "In", "By", and "Query" that go above the appropriate search criteria
+		absolutePanel.add(labelIn, 337, 158);
+		labelIn.setStyleName("sendButton");
+		absolutePanel.add(labelBy, 492, 158);
+		labelBy.setStyleName("sendButton");
+		absolutePanel.add(labelQuery, 80, 158);
+		labelQuery.setStyleName("sendButton");
+
+		//Sets up the header of the application main page
+		absolutePanel.add(labelHeader, 222, 10);
+		labelHeader.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		labelHeader.setStyleName("sendButton");
+		labelHeader.setSize("532px", "50px");
+
+		//Sets up the position, size, style, and initial String contained the the boxes
+		// for inputting the lower and upper bounds for the donated year
+		absolutePanel.add(lowerLimitYearDonatedTextBox, 259, 367);
+		lowerLimitYearDonatedTextBox.setStyleName("h1");
+		lowerLimitYearDonatedTextBox.setText("1851");
+		lowerLimitYearDonatedTextBox.setSize("127px", "24px");
+		absolutePanel.add(upperLimitYearDonatedTextBox, 475, 367);
+		upperLimitYearDonatedTextBox.setText(String.valueOf(java.util.Calendar.YEAR));//TODO: get this to display current year
+		upperLimitYearDonatedTextBox.setSize("118px", "18px");
+		
+		//add the labels for "Donated Between" and "AND"
+		absolutePanel.add(labelDonatedBetween, 80, 361);
+		labelDonatedBetween.setStyleName("sendButton");
+		labelDonatedBetween.setSize("173px", "30px");
+		absolutePanel.add(labelAnd, 408, 367);
+		labelAnd.setStyleName("sendButton");
+		labelAnd.setSize("61px", "34px");
+		
 		// Create a handler for the sendButton and nameField
 		class MyHandler implements ClickHandler, KeyUpHandler {
 			/**
 			 * Fired when the user clicks on the searchButton.
 			 */
-			public void onClick(ClickEvent event) {
-				SearchType type;
-				
-				if (scientificNameSearchTypeRadioButton.getValue() == true)
-					type = SearchType.scientificName;
-				else if (commonNameSearchTypeRadioButton.getValue() == true)
-					type = SearchType.commonName;
+			public void onClick(ClickEvent event) 
+			{
+				if(checkCurrentSearchConfigurationForConsistency())
+				{//this could/perhaps should be moved to a private method for readability
+					SearchType searchBy = SearchType.commonName;//default
+					
+					if(commonNameSearchTypeRadioButton.getValue())
+						searchBy = SearchType.commonName;
+					if(scientificNameSearchTypeRadioButton.getValue())
+						searchBy = SearchType.scientificName;
+					if(donatedForSearchTypeRadioButton.getValue())
+						searchBy = SearchType.donatedFor;
+
+					ArrayList<SearchFor>  searchTypes = new ArrayList<SearchFor>();//the ArrayList to pass the
+																					//constructor of SearchParameter
+
+					if(checkBoxTrees.getValue())
+						searchTypes.add(SearchFor.trees);
+					
+					if(checkBoxBenches.getValue())
+						searchTypes.add(SearchFor.benches);
+
+					if(checkBoxBricks.getValue())
+						searchTypes.add(SearchFor.bricks);
+					
+					SearchParameter searchParameter = new SearchParameter(searchField.getText(), 
+							searchTypes, 
+							searchBy, 
+							Quadrant.C, 
+							Integer.valueOf(lowerLimitYearDonatedTextBox.getText()), 
+							Integer.valueOf(upperLimitYearDonatedTextBox.getText()));
+					
+					rootPanel.clear();
+					PageController.sharedPageController().showSearchResultsPage(searchParameter);
+				}
 				else
-					type = null;//default search
-				
-				//treeFinder.getSearchResultsForSimpleSearch(searchField.getText(), type);
-				
-				if (type != null)
-					sendQueryDataToServer(type.toString());
-				else 
-					sendQueryDataToServer("all");
+					Window.alert(INCONSISTENT_SEARCH_CRITERIA);				
+			}
+			
+			private boolean checkCurrentSearchConfigurationForConsistency() {
+				// TODO write this method
+				return true;
 			}
 
-			/**
-			 * Fired when the user types in the nameField.
-			 */
+			//TODO: implement the parameter for Quadrant so that an ArrayList of Quadrants are passed so that the user can select more than one
+			
+			//not sure what this is for
+			@Override
 			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					sendQueryDataToServer("");
-				}
-			}
+				// TODO Auto-generated method stub
 
-			/**
-			 * Send the name from the nameField to the server and wait for a response.
-			 */
-			private void sendQueryDataToServer(final String searchType) {
-				// First, we validate the input.
-				errorLabel.setText("");
-				String textToServer = searchField.getText();
-				if (!FieldVerifier.isValidName(textToServer)) 
-				{
-					errorLabel.setText("Please enter at least four characters");
-					return;
-				}
-
-				// Then, we send the input to the server.
-				searchButton.setEnabled(false);
-				textToServerLabel.setText(textToServer);
-				serverResponseLabel.setText("");
-				
-				dialogBox.setText("Remote Procedure Call - Failure");
-				serverResponseLabel.addStyleName("serverResponseLabelError");
-				serverResponseLabel.setHTML("You searched:\n\tFOR " + searchField.getText() + 
-				"\n\tIN Trees (default) " + "\n\tBY " + searchType);
-				dialogBox.center();
-				closeButton.setFocus(true);
 			}
 		}
 
-		// Add a handler to send the name to the server
+		absolutePanel.add(searchButton, 663, 442);
+		searchButton.setStyleName("h1");
+		searchButton.addStyleName("searchButton");
+		searchButton.setSize("134px", "56px");
+		searchField.setFocus(true);
+
+		// Add a handler to send the search parameter data to the SearchResultsPage when the user presses "Search"
 		MyHandler handler = new MyHandler();
-		searchButton.addClickHandler(handler);
 		searchField.addKeyUpHandler(handler);
+		searchButton.addClickHandler(handler);
+		absolutePanel.add(searchField, 80, 204);
 	}
 
 	@Override
-	public void onClick(ClickEvent event) {
-		// TODO Auto-generated method stub
-		
+	public void close() 
+	{		
+		rootPanel.clear();
+	}
+
+	@Override
+	public void reload()
+	{
+
 	}
 }	
-
