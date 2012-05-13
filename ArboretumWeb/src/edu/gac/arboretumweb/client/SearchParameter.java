@@ -1,6 +1,12 @@
 package edu.gac.arboretumweb.client;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import edu.gac.arboretumweb.client.SearchParameter.Quadrant;
+import edu.gac.arboretumweb.client.SearchParameter.SearchFor;
+import edu.gac.arboretumweb.client.SearchParameter.SearchType;
+import edu.gac.arboretumweb.shared.domain.DonatedObject;
 
 /**
  * A single class for representing the parameters that will be passed from the MainPage to the class responsible 
@@ -18,95 +24,96 @@ public class SearchParameter
 	public enum SearchType
 	{
 		//allowed values with names specified in parentheses
-        commonName("Common Name"), 
-        scientificName("Scientific Name"), 
-        yearDonated("Year Donated"), 
-        donatedFor("Donated For");
-        
-        //declaring the name field
-        private final String name;
-        
-        //constructor
-        SearchType(String name)
-        {
-        	this.name = name;
-        }
-        
-        //called when the value is used in a string environment
-        public String toString()
-        {
-        	return name;
-        }
-    }
-	
-	enum SearchFor
-	{
-		trees("Trees"), 
-		benches("Benches"), 
-		bricks("Bricks");
-		
+		commonName("Common Name"), 
+		scientificName("Scientific Name"),  
+		donatedFor("Donated For");
+
+		//declaring the name field
 		private final String name;
-		
-		SearchFor(String name)
+
+		//constructor
+		SearchType(String name)
 		{
 			this.name = name;
 		}
-		
+
+		//called when the value is used in a string environment
 		public String toString()
 		{
 			return name;
 		}
 	}
-	
-	// Specifying the strings to be returned here is not necessary
-	enum Quadrant{
-		A, B, C, D
+
+	enum SearchFor
+	{
+		trees("Trees"), 
+		benches("Benches"), 
+		bricks("Bricks");
+
+		private final String name;
+
+		SearchFor(String name)
+		{
+			this.name = name;
+		}
+
+		public String toString()
+		{
+			return name;
+		}
 	}
-	
+
+	// Specifying the strings to be returned here is not necessary
+	public enum Quadrant{
+		A, B, C, D, E
+	}
+
 	String keywordQuery;
-	private int lowBoundDonatedYear;
-	private int highBoundDonatedYear;
-	private ArrayList<SearchFor> searchForParams;//(trees, benches bricks)
+	private SearchFor searchFor;//(trees, benches bricks)
 	private SearchType searchType;
-	private Quadrant quadrant;
-	
+	private ArrayList<Quadrant> quadrants;
+	private boolean undonatedBoxChecked;
+
 	public SearchParameter(String keywordQuery, 
-			ArrayList<SearchFor> searchForParams, 
+			SearchFor searchFor, 
 			SearchType searchType, 
-			Quadrant quadrant, 
-			int lowBoundDonatedYear,
-			int highBoundDonatedYear)
+			ArrayList<Quadrant> quadrants, 
+			boolean unDonatedBoxChecked)
 	{
 		this.keywordQuery = keywordQuery;
 		this.searchType = searchType;
-		this.searchForParams = searchForParams;
-		this.quadrant = quadrant;
-		this.highBoundDonatedYear = highBoundDonatedYear;
-		this.lowBoundDonatedYear = lowBoundDonatedYear;
+		this.searchFor= searchFor;
+		this.quadrants = quadrants;
+		this.undonatedBoxChecked = unDonatedBoxChecked;
 	}
+	//public SearchParameter(String string, SearchFor trees,
+	//		SearchType commonname, ArrayList<Quadrant> quadrants) {
+		// TODO Auto-generated constructor stub
+	//}
+	public boolean isUndonatedBoxChecked(){
+		return undonatedBoxChecked;
+	}
+	public void setUndonatedBoxChecked(boolean setBoxTo){
+		undonatedBoxChecked=setBoxTo;
+	}
+	
 
 	public String getKeywordQuery()
 	{
 		return keywordQuery;
 	}
-	
-	public int getLowBoundDonatedYear() {
-		return lowBoundDonatedYear;
+
+	public String getSearchTypeAsString() {
+		return searchType.toString();
 	}
 
-	public int getHighBoundDonatedYear() {
-		return highBoundDonatedYear;
+	public ArrayList<Quadrant> getQuadrants() {
+		return quadrants;
 	}
-
-	public ArrayList<SearchFor> getSearchForParams() {
-		return searchForParams;
-	}
-
 	public SearchType getSearchType() {
 		return searchType;
 	}
-
-	public Quadrant getQuadrant() {
-		return quadrant;
+	public SearchFor getSearchFor() {
+		return searchFor;
 	}
 }

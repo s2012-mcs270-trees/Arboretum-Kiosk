@@ -175,8 +175,6 @@ public class ArboretumWeb implements EntryPoint, ClickHandler {
 					type = SearchType.scientificName;
 				else if (commonNameSearchTypeRadioButton.getValue() == true)
 					type = SearchType.commonName;
-				else if (yearDonatedSearchTypeRadioButton.getValue())
-					type = SearchType.yearDonated;
 				else
 					type = null;//default search
 				

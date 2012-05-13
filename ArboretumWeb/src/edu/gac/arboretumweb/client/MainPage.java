@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
  * Donated between two integer years - lowerLimit and upperLimit
  * ArrayList<Quadrant> - A, B, C, D defined by the map that shows on the mainPage
  */
-public class MainPage implements EntryPoint, ClickHandler, Page {
+public class MainPage implements EntryPoint, ClickHandler {
 	
 	//All variable are declared above the show method to make reading the code easier
 	
@@ -45,25 +45,27 @@ public class MainPage implements EntryPoint, ClickHandler, Page {
 	
 	//any variables that must be referenced inside a handler must be declared final
 	final RadioButton commonNameSearchTypeRadioButton = new RadioButton("Search Type", "Common Name");
-	final RadioButton sizeSearchTypeRadioButton = new RadioButton("Search Type", "Size");
 	final RadioButton donatedForSearchTypeRadioButton = new RadioButton("Search Type", "Donated For");
 	final RadioButton scientificNameSearchTypeRadioButton = new RadioButton("Search Type", "Scientific Name");
 	
-	final CheckBox checkBoxBenches = new CheckBox("Benches");
-	final CheckBox checkBoxTrees = new CheckBox("Trees");
-	final CheckBox checkBoxBricks = new CheckBox("Bricks");
+	final RadioButton benchesRadioButton = new RadioButton("Search For", "Benches");
+	final RadioButton treesRadioButton = new RadioButton("Search For", "Trees");
+	final RadioButton bricksRadioButton = new RadioButton("Search For", "Bricks");
 	private final CheckBox checkBoxNotYetDonated = new CheckBox("Bricks");
 	
+	CheckBox checkBoxQuadrantA = new CheckBox("A");
+	CheckBox checkBoxQuadrantB = new CheckBox("B");
+	CheckBox checkBoxQuadrantC = new CheckBox("C");
+	CheckBox checkBoxQuadrantD = new CheckBox("D");
+	CheckBox checkBoxQuadrantE = new CheckBox("E");
+	
 	final TextBox searchField = new TextBox();
-	final TextBox lowerLimitYearDonatedTextBox = new TextBox();
-	final TextBox upperLimitYearDonatedTextBox = new TextBox();
 	
 	Label labelIn = new InlineLabel("In");
 	Label labelBy = new InlineLabel("By");
 	Label labelQuery = new InlineLabel("Query");
 	Label labelHeader = new InlineLabel("Welcome to the Gustavus Adolphus College Arboretum Tree Search Application!");
-	Label labelDonatedBetween = new Label("Donated Between");
-	Label labelAnd = new Label("and");
+	Label labelLocatedInQuadrant = new Label("Located In Quadrant(s)");
 	
 	Button searchButton = new Button("Search");
 	
@@ -91,104 +93,18 @@ public class MainPage implements EntryPoint, ClickHandler, Page {
 
 		//set the default text that will appear in the searchField
 		searchField.setText("search");
-		
-		//Adds the radio buttons to the absolutePanel (i.e. "Donor", "Common Name", "Scientific Name", etc. 
-		absolutePanel.add(commonNameSearchTypeRadioButton, 492, 244);
-		absolutePanel.add(sizeSearchTypeRadioButton, 492, 218);
-		sizeSearchTypeRadioButton.setSize("113px", "20px");
-		absolutePanel.add(donatedForSearchTypeRadioButton, 492, 192);
-		absolutePanel.add(scientificNameSearchTypeRadioButton, 492, 270);
-		checkBoxTrees.setStyleName("h1");
-		absolutePanel.add(checkBoxTrees, 337, 192);
-				
-		//add a click handler so that when the Bricks checkBox is checked/unchecked, the corresponding
-		//radioButtons that can/can't be selected are enabled or disabled.  For example, if someone
-		//wants to search for bricks, the radioButton they select can't be search by "Common Name"
-		//TODO: make organize these better.  There need only be one private method that checks all
-		// 8 possible scenarios and handles each case appropriately
-		checkBoxBricks.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				if(checkBoxBricks.getValue())//Brick checkBox was enabled
-				{
-					commonNameSearchTypeRadioButton.setEnabled(false);
-					scientificNameSearchTypeRadioButton.setEnabled(false);
-					
-					if(!checkBoxTrees.getValue() && !checkBoxBenches.getValue())
-						sizeSearchTypeRadioButton.setEnabled(true);
-				}
-				else//brick checkBox was disabled
-				{
-					if(checkBoxTrees.getValue() && !checkBoxBenches.getValue())
-					{
-						commonNameSearchTypeRadioButton.setEnabled(true);
-						scientificNameSearchTypeRadioButton.setEnabled(true);
-					}
-				}
-			}
-		});
-		
-		absolutePanel.add(checkBoxBricks, 337, 244);
-		checkBoxBricks.setSize("71px", "20px");
-		
-		//Again, add the click handler
-		checkBoxBenches.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				if(checkBoxBenches.getValue())//if it is checked, be sure that commonName and scientific name and size are not searchable
-				{
-					commonNameSearchTypeRadioButton.setEnabled(false);
-					scientificNameSearchTypeRadioButton.setEnabled(false);
-					sizeSearchTypeRadioButton.setEnabled(false);
-				}
-				else//benches check button was unchecked by the event
-				{
-					if(checkBoxTrees.getValue() && !checkBoxBricks.getValue())//trees is checked but not bricks
-					{
-						commonNameSearchTypeRadioButton.setEnabled(true);
-						scientificNameSearchTypeRadioButton.setEnabled(true);
-						sizeSearchTypeRadioButton.setEnabled(false);
-					}
-					else if(!checkBoxTrees.getValue() && checkBoxBricks.getValue())//bricks are checked by not trees
-					{
-						commonNameSearchTypeRadioButton.setEnabled(false);
-						scientificNameSearchTypeRadioButton.setEnabled(false);
-						sizeSearchTypeRadioButton.setEnabled(true);
-					}
-					else if(checkBoxTrees.getValue() && checkBoxBricks.getValue())//both are checked
-					{
-						sizeSearchTypeRadioButton.setEnabled(false);
-						commonNameSearchTypeRadioButton.setEnabled(false);
-						scientificNameSearchTypeRadioButton.setEnabled(false);
-					}
-				}
-			}
-		});
-		
-		checkBoxTrees.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				if(checkBoxTrees.getValue())//if it is checked, we will not allow a search by size (available for bricks only)
-				{
-					sizeSearchTypeRadioButton.setEnabled(false);
-					if(!checkBoxBenches.getValue() && ! checkBoxBricks.getValue())
-					{
-						commonNameSearchTypeRadioButton.setEnabled(true);
-						scientificNameSearchTypeRadioButton.setEnabled(true);
-					}
-				}
-				else
-				{
-					if(checkBoxBenches.getValue())//common Name, scientific name and size are all not searchable if benches is checked
-					{
-						commonNameSearchTypeRadioButton.setEnabled(false);
-						scientificNameSearchTypeRadioButton.setEnabled(false);
-						sizeSearchTypeRadioButton.setEnabled(false);
-					}
-					else if(checkBoxBricks.getValue())//neither benches nor trees are checks
-						sizeSearchTypeRadioButton.setEnabled(true);
-					
-				}
-			}
-		});
-		absolutePanel.add(checkBoxBenches, 337, 218);
+			
+		//Adds the Quadrant checkBoxes and sets their initial values
+		absolutePanel.add(checkBoxQuadrantA, 663, 192);
+		absolutePanel.add(checkBoxQuadrantB, 663, 218);
+		absolutePanel.add(checkBoxQuadrantC, 663, 244);
+		absolutePanel.add(checkBoxQuadrantD, 732, 192);
+		absolutePanel.add(checkBoxQuadrantE, 732, 218);
+		checkBoxQuadrantA.setValue(true);
+		checkBoxQuadrantB.setValue(true);
+		checkBoxQuadrantC.setValue(true);
+		checkBoxQuadrantD.setValue(true);
+		checkBoxQuadrantE.setValue(true);
 		
 		checkBoxNotYetDonated.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -204,43 +120,76 @@ public class MainPage implements EntryPoint, ClickHandler, Page {
 			}
 		});
 		checkBoxNotYetDonated.setHTML("Not Yet Donated");
-		absolutePanel.add(checkBoxNotYetDonated, 618, 192);
+		absolutePanel.add(checkBoxNotYetDonated, 492, 270);
 		checkBoxNotYetDonated.setSize("136px", "20px");
 
-		//Sets up the labels for "In", "By", and "Query" that go above the appropriate search criteria
+		//Sets up the labels for "In", "By", "Query", and "Located in Quadrant(s)" that go above the appropriate search criteria
 		absolutePanel.add(labelIn, 337, 158);
 		labelIn.setStyleName("sendButton");
 		absolutePanel.add(labelBy, 492, 158);
 		labelBy.setStyleName("sendButton");
 		absolutePanel.add(labelQuery, 80, 158);
 		labelQuery.setStyleName("sendButton");
-
+		labelLocatedInQuadrant.setStyleName("sendButton");
+		absolutePanel.add(labelLocatedInQuadrant, 663, 158);
+		
 		//Sets up the header of the application main page
 		absolutePanel.add(labelHeader, 222, 10);
 		labelHeader.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		labelHeader.setStyleName("sendButton");
 		labelHeader.setSize("532px", "50px");
-
-		//Sets up the position, size, style, and initial String contained the the boxes
-		// for inputting the lower and upper bounds for the donated year
-		absolutePanel.add(lowerLimitYearDonatedTextBox, 259, 367);
-		lowerLimitYearDonatedTextBox.setStyleName("h1");
-		lowerLimitYearDonatedTextBox.setText("1851");
-		lowerLimitYearDonatedTextBox.setSize("127px", "24px");
-		absolutePanel.add(upperLimitYearDonatedTextBox, 475, 367);
-		upperLimitYearDonatedTextBox.setText(String.valueOf(java.util.Calendar.YEAR));//TODO: get this to display current year
-		upperLimitYearDonatedTextBox.setSize("118px", "18px");
 		
-		//add the labels for "Donated Between" and "AND"
-		absolutePanel.add(labelDonatedBetween, 80, 361);
-		labelDonatedBetween.setStyleName("sendButton");
-		labelDonatedBetween.setSize("173px", "30px");
-		absolutePanel.add(labelAnd, 408, 367);
-		labelAnd.setStyleName("sendButton");
-		labelAnd.setSize("61px", "34px");
+		/**
+		 * Click handler for the Trees, Benches, and Bricks radioButtons
+		 * @author Matt
+		 *
+		 */
+		class MySearchForRadioButtonHandler implements ClickHandler{
+			public void onClick(ClickEvent event)
+			{
+				checkCurrentSearchConfiguration();
+			}
+			/**
+			 * Checks to make sure that the current search configuration is valid 
+			 * i.e. makes sure you can't search by common name if brick is selected
+			 */
+			private void checkCurrentSearchConfiguration() {
+				if(!bricksRadioButton.getValue() && !benchesRadioButton.getValue())
+				{
+					commonNameSearchTypeRadioButton.setEnabled(true);
+					scientificNameSearchTypeRadioButton.setEnabled(true);
+				}
+				else
+				{
+					commonNameSearchTypeRadioButton.setEnabled(false);
+					scientificNameSearchTypeRadioButton.setEnabled(false);
+
+					if(commonNameSearchTypeRadioButton.getValue())
+						commonNameSearchTypeRadioButton.setValue(false);
+					if(scientificNameSearchTypeRadioButton.getValue())
+						scientificNameSearchTypeRadioButton.setValue(false);
+				}
+			}
+		}
+
+		//Adds the radio buttons to the absolutePanel (i.e. "Donor", "Common Name", "Scientific Name", etc. 
+		absolutePanel.add(commonNameSearchTypeRadioButton, 492, 218);
+		absolutePanel.add(donatedForSearchTypeRadioButton, 492, 192);
+		absolutePanel.add(scientificNameSearchTypeRadioButton, 492, 244);
+		treesRadioButton.setHTML("Trees");
+		treesRadioButton.setStyleName("h1");
+		absolutePanel.add(treesRadioButton, 337, 192);
+		bricksRadioButton.setHTML("Bricks");
+		absolutePanel.add(bricksRadioButton, 337, 244);
+		bricksRadioButton.setSize("71px", "20px");
+		benchesRadioButton.setHTML("Benches");
+		absolutePanel.add(benchesRadioButton, 337, 218);
+		treesRadioButton.addClickHandler(new MySearchForRadioButtonHandler());
+		benchesRadioButton.addClickHandler(new MySearchForRadioButtonHandler());
+		bricksRadioButton.addClickHandler(new MySearchForRadioButtonHandler());
 		
 		// Create a handler for the sendButton and nameField
-		class MyHandler implements ClickHandler, KeyUpHandler {
+		class MySendButtonHandler implements ClickHandler, KeyUpHandler {
 			/**
 			 * Fired when the user clicks on the searchButton.
 			 */
@@ -257,38 +206,60 @@ public class MainPage implements EntryPoint, ClickHandler, Page {
 					if(donatedForSearchTypeRadioButton.getValue())
 						searchBy = SearchType.donatedFor;
 
-					ArrayList<SearchFor>  searchTypes = new ArrayList<SearchFor>();//the ArrayList to pass the
-																					//constructor of SearchParameter
+					SearchFor  searchFor = SearchFor.trees; //the ArrayList to pass the constructor of SearchParameter
 
-					if(checkBoxTrees.getValue())
-						searchTypes.add(SearchFor.trees);
+					if(treesRadioButton.getValue())
+						searchFor = SearchFor.trees;
+					if(benchesRadioButton.getValue())
+						searchFor = SearchFor.benches;
+					if(bricksRadioButton.getValue())
+						searchFor = SearchFor.bricks;
 					
-					if(checkBoxBenches.getValue())
-						searchTypes.add(SearchFor.benches);
-
-					if(checkBoxBricks.getValue())
-						searchTypes.add(SearchFor.bricks);
+					ArrayList<Quadrant> quadrants = new ArrayList<Quadrant>();
+					if(checkBoxQuadrantA.getValue())
+						quadrants.add(Quadrant.A);
+					if(checkBoxQuadrantB.getValue())
+						quadrants.add(Quadrant.B);
+					if(checkBoxQuadrantC.getValue())
+						quadrants.add(Quadrant.C);
+					if(checkBoxQuadrantD.getValue())
+						quadrants.add(Quadrant.D);
+					if(checkBoxQuadrantE.getValue())
+						quadrants.add(Quadrant.E);
 					
 					SearchParameter searchParameter = new SearchParameter(searchField.getText(), 
-							searchTypes, 
+							searchFor, 
 							searchBy, 
-							Quadrant.C, 
-							Integer.valueOf(lowerLimitYearDonatedTextBox.getText()), 
-							Integer.valueOf(upperLimitYearDonatedTextBox.getText()));
+							quadrants,
+							checkBoxNotYetDonated.getValue());
 					
 					rootPanel.clear();
 					PageController.sharedPageController().showSearchResultsPage(searchParameter);
-				}
-				else
-					Window.alert(INCONSISTENT_SEARCH_CRITERIA);				
+				}		
 			}
 			
 			private boolean checkCurrentSearchConfigurationForConsistency() {
-				// TODO write this method
-				return true;
+				System.out.println(checkBoxQuadrantA.getValue());
+				System.out.println(checkBoxQuadrantB.getValue());
+				System.out.println(checkBoxQuadrantC.getValue());
+				System.out.println(checkBoxQuadrantD.getValue());
+				System.out.println(checkBoxQuadrantE.getValue());
+				
+				if(!checkBoxQuadrantA.getValue() && !checkBoxQuadrantB.getValue() && !checkBoxQuadrantC.getValue() 
+						&& ! checkBoxQuadrantD.getValue() && !checkBoxQuadrantE.getValue())
+				{
+					Window.alert("At least one quadrant must be selected.");
+					return false;
+				}
+				if(!benchesRadioButton.getValue() && !bricksRadioButton.getValue() && ! treesRadioButton.getValue())
+				{
+					Window.alert("At least one of \"Trees\", \"Benches\", or \"Bricks\" must be selected.");
+					return false;
+				}
+				
+				
+				return true;				
 			}
-
-			//TODO: implement the parameter for Quadrant so that an ArrayList of Quadrants are passed so that the user can select more than one
 			
 			//not sure what this is for
 			@Override
@@ -305,21 +276,9 @@ public class MainPage implements EntryPoint, ClickHandler, Page {
 		searchField.setFocus(true);
 
 		// Add a handler to send the search parameter data to the SearchResultsPage when the user presses "Search"
-		MyHandler handler = new MyHandler();
+		MySendButtonHandler handler = new MySendButtonHandler();
 		searchField.addKeyUpHandler(handler);
 		searchButton.addClickHandler(handler);
 		absolutePanel.add(searchField, 80, 204);
-	}
-
-	@Override
-	public void close() 
-	{		
-		rootPanel.clear();
-	}
-
-	@Override
-	public void reload()
-	{
-
 	}
 }	

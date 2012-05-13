@@ -43,7 +43,7 @@ public class PageController implements EntryPoint
 	//the Searcher class since it is the only one that will use the data (MainPage doesn't use the list)
 	public void showSearchResultsPage(SearchParameter p)
 	{
-		//Right now, an entire new SearchResultsPage instantiation is created because extra columns get added 
+		// Right now, an entire new SearchResultsPage instantiation is created because extra columns get added 
 		// to the dataGrid in the class every time it is called.  This call is thus redundant since
 		// any class that wants to call showTreePage() could instantiate a new TreePage like here and run
 		// .show(tree, sp).  This makes the PageController redundant in this case except to limit the 
@@ -52,18 +52,17 @@ public class PageController implements EntryPoint
 		// 1) one option would be to have all the initialization of the page be done in the constructor, 
 		// then update the fields (if any) that need to be update in the .show() method of each page.
 		// This would help keep the PageController.
-		SearchResultsPage searchResultsPage2 = new SearchResultsPage();
-		searchResultsPage2.show(p);
+		searchResultsPage.show(p);
 	}
 
+	/**
+	 * @param tree - the tree page to be displayed
+	 * @param sp, required so that if the user wishes to press the "Back" button, the search configuration can be loaded to 
+	 * show their last search
+	 */
 	public void showTreePage(Tree tree, SearchParameter sp)
 	{
-		treePage.show(tree, sp);
-	}
-
-	public void showPreviousPage()
-	{
-		
+		treePage.show(tree);
 	}
 	
 	@Override

@@ -1,10 +1,17 @@
 package edu.gac.arboretumweb.shared.domain;
 
-public class Tree {
-    private String commonName;
+import java.io.Serializable;
+
+import edu.gac.arboretumweb.client.SearchParameter.Quadrant;
+
+public class Tree extends DonatedObject implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String commonName;
     private String scientificName;
     private String yearPlanted;
-    private String yearDonated;
     private String health;
     private String longitude;
     private String latitude;
@@ -15,10 +22,10 @@ public class Tree {
     //default constructor for debugging and to ensure that all trees created have specified fields
     public Tree() 
     {
+    	super.setYearDonated(1990);
     	commonName = "White Oak";
     	scientificName = "Quercus alba";
     	yearPlanted = "1999";
-    	yearDonated = "2004";
     	health = "good";
     	longitude = "93.9578";
     	latitude = "44.3236";
@@ -56,11 +63,7 @@ public class Tree {
 		this.yearPlanted = yearPlanted;
 	}
 
-	public String getYearDonated() {
-		return yearDonated;
-	}
-
-	public void setYearDonated(String yearDonated) {
+	public void setYearDonated(int yearDonated) {
 		this.yearDonated = yearDonated;
 	}
 
@@ -110,5 +113,10 @@ public class Tree {
 
 	public void setDonatedBy(String donatedBy) {
 		this.donatedBy = donatedBy;
+	}
+
+	public Quadrant getQuadrant() {
+		// TODO Auto-generated method stub
+		return Quadrant.E;
 	}
 }
