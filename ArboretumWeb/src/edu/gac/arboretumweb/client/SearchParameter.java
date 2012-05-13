@@ -1,12 +1,6 @@
 package edu.gac.arboretumweb.client;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import edu.gac.arboretumweb.client.SearchParameter.Quadrant;
-import edu.gac.arboretumweb.client.SearchParameter.SearchFor;
-import edu.gac.arboretumweb.client.SearchParameter.SearchType;
-import edu.gac.arboretumweb.shared.domain.DonatedObject;
 
 /**
  * A single class for representing the parameters that will be passed from the MainPage to the class responsible 

@@ -2,6 +2,8 @@ package edu.gac.arboretumweb.client;
 
 import com.google.gwt.core.client.EntryPoint;
 
+import edu.gac.arboretumweb.shared.domain.Bench;
+import edu.gac.arboretumweb.shared.domain.Brick;
 import edu.gac.arboretumweb.shared.domain.Tree;
 
 /**
@@ -16,6 +18,8 @@ public class PageController implements EntryPoint
 	private final MainPage mainPage = new MainPage();
 	private final SearchResultsPage searchResultsPage = new SearchResultsPage();
 	private final TreePage treePage = new TreePage();
+	private final BenchPage benchPage = new BenchPage();
+	private final BrickPage brickPage = new BrickPage();
 	
 	protected PageController() 
 	{
@@ -62,7 +66,17 @@ public class PageController implements EntryPoint
 	 */
 	public void showTreePage(Tree tree, SearchParameter sp)
 	{
-		treePage.show(tree);
+		treePage.show(tree, sp);
+	}
+	
+	public void showBenchPage(Bench bench, SearchParameter sp)
+	{
+		benchPage.show(bench, sp);
+	}
+	
+	public void showBrickPage(Brick brick, SearchParameter sp)
+	{
+		brickPage.show(brick, sp);
 	}
 	
 	@Override

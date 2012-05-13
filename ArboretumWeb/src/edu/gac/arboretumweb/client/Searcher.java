@@ -8,7 +8,6 @@ import edu.gac.arboretumweb.shared.domain.Bench;
 import edu.gac.arboretumweb.shared.domain.Brick;
 import edu.gac.arboretumweb.shared.domain.Tree;
 import edu.gac.arboretumweb.client.SearchParameter;
-import edu.gac.arboretumweb.server.*;
 import com.google.gwt.core.client.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

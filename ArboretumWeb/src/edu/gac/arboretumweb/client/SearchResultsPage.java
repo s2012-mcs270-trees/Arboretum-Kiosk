@@ -1,9 +1,6 @@
 package edu.gac.arboretumweb.client;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -11,7 +8,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.SimplePager.TextLocation;
@@ -456,7 +452,14 @@ public class SearchResultsPage implements EntryPoint
 	    			{
 	    				PageController.sharedPageController().showTreePage((Tree)selectedObject, searchParameter);
 	    			}
-	    			
+	    			if(selectedObject instanceof Bench)
+	    			{
+	    				
+	    			}
+	    			if(selectedObject instanceof Brick)
+	    			{
+	    				
+	    			}
 	    		}
 	    	}
 	    });

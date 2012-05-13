@@ -2,6 +2,8 @@ package edu.gac.arboretumweb.shared.domain;
 
 import java.io.Serializable;
 
+import edu.gac.arboretumweb.client.SearchParameter.Quadrant;
+
 public class Brick extends DonatedObject implements Serializable {
 
 	/**
@@ -35,6 +37,5 @@ public class Brick extends DonatedObject implements Serializable {
 
 	public void setDistance(String distance) {
 		this.distance = distance;
-	}
-    
+	}    
 }

@@ -17,7 +17,10 @@ public class Tree extends DonatedObject implements Serializable{
     private String latitude;
     private String diameter;
     private String donatedFor;
-    private String donatedBy;
+    private Quadrant quadrant;
+    
+    //TODO: decide whether or not to include yearPlanted, diameter, and health since they aren't 
+       //used in the UI
     
     //default constructor for debugging and to ensure that all trees created have specified fields
     public Tree() 
@@ -31,11 +34,10 @@ public class Tree extends DonatedObject implements Serializable{
     	latitude = "44.3236";
     	diameter = "2.2";
     	donatedFor = "Mark Johnson";
-    	donatedBy = "Cindy Johnson";
+    	this.setQuadrant();
     }
     
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
 
     }
 
@@ -106,17 +108,34 @@ public class Tree extends DonatedObject implements Serializable{
 	public void setDonatedFor(String donatedFor) {
 		this.donatedFor = donatedFor;
 	}
-
-	public String getDonatedBy() {
-		return donatedBy;
+	
+	private void setQuadrant()
+	{
+		Float Latitude = (float) Double.valueOf(this.getLatitude()).doubleValue();
+		Float Longitude = (float) Double.valueOf(this.getLongitude()).doubleValue();
+		 
+		if(Latitude < 44.323368 && Longitude < -93.976750)
+		{
+			this.quadrant = Quadrant.B;
+		}
+		else if (Latitude < 44.323368 && Longitude < -93.973827)
+		{
+			this.quadrant = Quadrant.A;
+		}
+		else if (Latitude < 44.323368 && Longitude >= -93.973827)
+		{
+			this.quadrant = Quadrant.D;
+		}
+		else if (Latitude >= 44.323368 && Longitude < -93.973827)
+		{
+			this.quadrant = Quadrant.C;
+		}
+		else
+			this.quadrant = Quadrant.E;
 	}
-
-	public void setDonatedBy(String donatedBy) {
-		this.donatedBy = donatedBy;
-	}
-
-	public Quadrant getQuadrant() {
-		// TODO Auto-generated method stub
-		return Quadrant.E;
+	
+	public Quadrant getQuadrant()
+	{
+		return quadrant;
 	}
 }

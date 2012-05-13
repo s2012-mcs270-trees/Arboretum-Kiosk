@@ -13,27 +13,25 @@ import com.google.gwt.user.client.ui.Button;
 public class BenchPage implements EntryPoint {
 
 	@Override
-	public void onModuleLoad() {
-		//public void showBenchPage(Bench Bench){	
-
+	public void onModuleLoad() 
+	{
+		
+	}
+	
+	public void show(Bench bench, final SearchParameter sp)
+	{
 		final Bench Bench = new Bench();
 		final RootPanel rootPanel = RootPanel.get();
 		rootPanel.setSize("1600", "900");
-
-
-
 
 		String mapType = "hydrid";
 
 		Float BenchLatitude = (float) Double.valueOf(Bench.getLatitude()).doubleValue();
 		Float BenchLongitude = (float) Double.valueOf(Bench.getLongitude()).doubleValue();
 
-
 		final String zoom = checkSize(BenchLatitude, BenchLongitude);
 
 		createMap(Bench, rootPanel, zoom, mapType);
-
-
 
 		Button btnRoadMap = new Button("Road Map");
 		rootPanel.add(btnRoadMap, 10, 449);
@@ -45,7 +43,6 @@ public class BenchPage implements EntryPoint {
 			}
 		});
 
-
 		Button btnHybridMap = new Button("Hybrid Map");
 		rootPanel.add(btnHybridMap, 193, 449);
 		btnHybridMap.setSize("115px", "55px");
@@ -55,8 +52,7 @@ public class BenchPage implements EntryPoint {
 				createMap(Bench, rootPanel, zoom, "hybrid");
 			}
 		});
-
-
+		
 		Button btnSatelliteMap = new Button("Satellite Map");
 		rootPanel.add(btnSatelliteMap, 374, 449);
 		btnSatelliteMap.setSize("115px", "55px");
@@ -66,7 +62,6 @@ public class BenchPage implements EntryPoint {
 				createMap(Bench, rootPanel, zoom, "satellite");
 			}
 		});
-
 
 		Label lblYourBench = new Label("Your Bench");
 		rootPanel.add(lblYourBench, 550, 10);
@@ -78,13 +73,11 @@ public class BenchPage implements EntryPoint {
 		Label lblYearDonated = new Label("Year Donated");
 		rootPanel.add(lblYearDonated, 550, 183);
 
-
 		Label lblBenchgetdonor = new Label(Bench.getDonatedFor());
 		rootPanel.add(lblBenchgetdonor, 550, 119);
 
 		Label lblBenchgetyeardonated = new Label(String.valueOf(Bench.getYearDonated()));
 		rootPanel.add(lblBenchgetyeardonated, 550, 207);
-
 
 		Button btnHomePage = new Button("Home Page");
 		rootPanel.add(btnHomePage, 879, 34);
@@ -92,10 +85,9 @@ public class BenchPage implements EntryPoint {
 
 		btnHomePage.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				//PageController.sharedPageController().showMainPage();
+				PageController.sharedPageController().showMainPage();
 			}
 		});
-
 
 		Button btnBack = new Button("Back");
 		rootPanel.add(btnBack, 879, 119);
@@ -103,7 +95,7 @@ public class BenchPage implements EntryPoint {
 
 		btnBack.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				//PageController.sharedPageController().showPreviousPage();
+				PageController.sharedPageController().showSearchResultsPage(sp);
 			}
 		});	
 	}
@@ -121,6 +113,8 @@ public class BenchPage implements EntryPoint {
 		Image image = new Image((String) url);
 		rootPanel.add(image, 10, 34);
 		image.setSize("479px", "409px");
-	}
+	}	
 }
+	
+	
 
