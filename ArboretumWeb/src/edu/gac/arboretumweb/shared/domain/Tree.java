@@ -13,8 +13,8 @@ public class Tree extends DonatedObject implements Serializable{
     private String scientificName;
     private String yearPlanted;
     private String health;
-    private String longitude;
-    private String latitude;
+    private double longitude;
+    private double latitude;
     private String diameter;
     private String donatedFor;
     private Quadrant quadrant;
@@ -25,13 +25,13 @@ public class Tree extends DonatedObject implements Serializable{
     //default constructor for debugging and to ensure that all trees created have specified fields
     public Tree() 
     {
-    	super.setYearDonated(1990);
+    	super.setYearDonated("1990");
     	commonName = "White Oak";
     	scientificName = "Quercus alba";
     	yearPlanted = "1999";
     	health = "good";
-    	longitude = "93.9578";
-    	latitude = "44.3236";
+    	longitude = 93.9578;
+    	latitude = 44.3236;
     	diameter = "2.2";
     	donatedFor = "Mark Johnson";
     	this.setQuadrant();
@@ -65,7 +65,7 @@ public class Tree extends DonatedObject implements Serializable{
 		this.yearPlanted = yearPlanted;
 	}
 
-	public void setYearDonated(int yearDonated) {
+	public void setYearDonated(String yearDonated) {
 		this.yearDonated = yearDonated;
 	}
 
@@ -77,19 +77,19 @@ public class Tree extends DonatedObject implements Serializable{
 		this.health = health;
 	}
 
-	public String getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(String longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
-	public String getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(String latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
@@ -111,22 +111,22 @@ public class Tree extends DonatedObject implements Serializable{
 	
 	private void setQuadrant()
 	{
-		Float Latitude = (float) Double.valueOf(this.getLatitude()).doubleValue();
-		Float Longitude = (float) Double.valueOf(this.getLongitude()).doubleValue();
+		double latitude = this.getLatitude();
+		double longitude = this.getLongitude();
 		 
-		if(Latitude < 44.323368 && Longitude < -93.976750)
+		if(latitude < 44.323368 && longitude< -93.976750)
 		{
 			this.quadrant = Quadrant.B;
 		}
-		else if (Latitude < 44.323368 && Longitude < -93.973827)
+		else if (latitude < 44.323368 && longitude< -93.973827)
 		{
 			this.quadrant = Quadrant.A;
 		}
-		else if (Latitude < 44.323368 && Longitude >= -93.973827)
+		else if (latitude < 44.323368 && longitude >= -93.973827)
 		{
 			this.quadrant = Quadrant.D;
 		}
-		else if (Latitude >= 44.323368 && Longitude < -93.973827)
+		else if (latitude >= 44.323368 && longitude < -93.973827)
 		{
 			this.quadrant = Quadrant.C;
 		}

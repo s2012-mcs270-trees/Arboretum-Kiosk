@@ -2,8 +2,6 @@ package edu.gac.arboretumweb.shared.domain;
 
 import java.io.Serializable;
 
-import edu.gac.arboretumweb.client.SearchParameter.Quadrant;
-
 public class Brick extends DonatedObject implements Serializable {
 
 	/**
@@ -20,7 +18,7 @@ public class Brick extends DonatedObject implements Serializable {
     	this.setDistance("1");
     	this.setDonatedFor("Captian Morgan");
     	this.setSize("Massive");
-    	this.setYearDonated(1999);
+    	this.setYearDonated("1999");
     }
 
 	public String getSize() {

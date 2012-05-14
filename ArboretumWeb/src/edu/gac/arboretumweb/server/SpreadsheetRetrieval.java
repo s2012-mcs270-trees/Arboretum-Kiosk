@@ -36,7 +36,7 @@ MasterListRetrieval {
 
 		//update tree list
 		WorksheetFeed feed = treeSpreadsheetService.getFeed(treeURL,
-	       WorksheetFeed.class);
+				WorksheetFeed.class);
 		List<WorksheetEntry> worksheets = feed.getEntries();
 
 		if (worksheets.size() == 0) {
@@ -50,7 +50,7 @@ MasterListRetrieval {
 			}
 		}
 
-	   // Fetch the list feed of the worksheet.
+		// Fetch the list feed of the worksheet.
 		URL listFeedUrl = treeWorksheet.getListFeedUrl();
 		ListFeed listFeed = treeSpreadsheetService.getFeed(listFeedUrl, ListFeed.class);
 
@@ -70,38 +70,44 @@ MasterListRetrieval {
 					String scientificName = entry.getCustomElements().getValue(tag);
 					tree.setScientificName(scientificName);
 				} else if ("yearplanted".equals(tag)) {
-					String stringYearPlanted = entry.getCustomElements().getValue(tag);
-					try {
-						Integer yearPlanted = new Integer(stringYearPlanted);
-						tree.setYearPlanted(""+yearPlanted.intValue());
-					} catch (NumberFormatException e) {
-
-					}
+					String yearPlanted = entry.getCustomElements().getValue(tag);
+					tree.setYearPlanted(yearPlanted);
 				} else if ("health".equals(tag)) {
 					String health = entry.getCustomElements().getValue(tag);
 					tree.setHealth(health);
 				} else if ("longitude".equals(tag)) {
-					String longitude = entry.getCustomElements().getValue(tag);
-					tree.setLongitude(longitude);
-				} else if ("latitude".equals(tag)) {
-					String latitude = entry.getCustomElements().getValue(tag);
-					tree.setLatitude(latitude);
-				} else if ("diameter".equals(tag)) {
-					String diameter = entry.getCustomElements().getValue(tag);
-					tree.setDiameter(diameter);
-				} else if ("yeardonated".equals(tag)) {
-					String stringYearDonated = entry.getCustomElements().getValue(tag);
-					try {
-						Integer yearDonated = new Integer(stringYearDonated);
-						tree.setYearDonated(yearDonated.intValue());
-					} catch (NumberFormatException e) {
-
+					String stringLongitude = entry.getCustomElements().getValue(tag);
+					if (stringLongitude == null) {
+						tree.setLongitude(0);
+					} else {
+						try {
+							Double longitude = new Double(stringLongitude);
+							tree.setLongitude(longitude.doubleValue());
+						} catch (NumberFormatException e) {
+							//Do nothing, will get set to zero by default
+						}
 					}
-
-				} else if ("donatedfor".equals(tag)) {
-					String donatedFor = entry.getCustomElements().getValue(tag);
-					tree.setDonatedFor(donatedFor);
-				}
+				} else if ("latitude".equals(tag)) {
+					String stringLatitude = entry.getCustomElements().getValue(tag);
+					if (stringLatitude == null) {
+						tree.setLatitude(0);
+					}else {
+						try {
+							Double latitude = new Double(stringLatitude);
+							tree.setLatitude(latitude.doubleValue());
+						} catch (NumberFormatException e) {
+							//Do nothing, will get set to zero by default
+						}
+					}} else if ("diameter".equals(tag)) {
+						String diameter = entry.getCustomElements().getValue(tag);
+						tree.setDiameter(diameter);
+					} else if ("yeardonated".equals(tag)) {
+						String yearDonated = entry.getCustomElements().getValue(tag);
+						tree.setYearDonated(yearDonated);
+					} else if ("donatedfor".equals(tag)) {
+						String donatedFor = entry.getCustomElements().getValue(tag);
+						tree.setDonatedFor(donatedFor);
+					}
 			}
 			this.treeMasterList.add(tree);
 		}
@@ -134,20 +140,33 @@ MasterListRetrieval {
 					String benchType = entry.getCustomElements().getValue(tag);
 					bench.setType(benchType);
 				} else if ("yeardonated".equals(tag)) {
-					String stringYearDonated = entry.getCustomElements().getValue(tag);
-					try {
-					Integer yearDonated = new Integer(stringYearDonated);
-					bench.setYearDonated(yearDonated.intValue());
-					} catch (NumberFormatException e) {
-
-					}
+					String yearDonated = entry.getCustomElements().getValue(tag);
+					bench.setYearDonated(yearDonated);
 				} else if ("longitude".equals(tag)) {
-					String longitude = entry.getCustomElements().getValue(tag);
-					bench.setLongitude(longitude);
+					String stringLongitude = entry.getCustomElements().getValue(tag);
+					if (stringLongitude == null) {
+						bench.setLongitude(0);
+					} else{
+						try {
+							Double longitude = new Double(stringLongitude);
+							bench.setLongitude(longitude.doubleValue());
+						} catch (NumberFormatException e) {
+
+						}
+					}
 				} else if ("latitude".equals(tag)) {
-					String latitude = entry.getCustomElements().getValue(tag);
-					bench.setLatitude(latitude);
-				} else if ("donatedfor".equals(tag)) {
+					String stringLatitude = entry.getCustomElements().getValue(tag);
+					if (stringLatitude == null) {
+						bench.setLatitude(0);
+					} else{
+						try {
+							Double latitude = new Double(stringLatitude);
+							bench.setLatitude(latitude.doubleValue());
+						} catch (NumberFormatException e) {
+
+						}
+					}
+				}else if ("donatedfor".equals(tag)) {
 					String donatedFor = entry.getCustomElements().getValue(tag);
 					bench.setDonatedFor(donatedFor);
 				}
@@ -165,7 +184,7 @@ MasterListRetrieval {
 			}
 		}
 
-	   // Fetch the list feed of the worksheet.
+		// Fetch the list feed of the worksheet.
 		listFeedUrl = brickWorksheet.getListFeedUrl();
 		listFeed = treeSpreadsheetService.getFeed(listFeedUrl, ListFeed.class);
 
@@ -178,13 +197,8 @@ MasterListRetrieval {
 					String brickSize = entry.getCustomElements().getValue(tag);
 					brick.setSize(brickSize);
 				} else if ("yeardonated".equals(tag)) {
-					String stringYearDonated = entry.getCustomElements().getValue(tag);
-					try {
-						Integer yearDonated = new Integer(stringYearDonated);
-						brick.setYearDonated(yearDonated.intValue());
-					} catch (NumberFormatException e) {
-
-					}
+					String yearDonated = entry.getCustomElements().getValue(tag);						
+					brick.setYearDonated(yearDonated);
 				} else if ("donatedfor".equals(tag)) {
 					String donatedFor = entry.getCustomElements().getValue(tag);
 					brick.setDonatedFor(donatedFor);
@@ -198,7 +212,7 @@ MasterListRetrieval {
 
 	}
 	public SpreadsheetRetrieval() throws MalformedURLException {
-		 this.treeURL = new URL("https://spreadsheets.google.com/feeds/worksheets/0AjkI1jvOdpNzdEYwZEc5Zk5nbHIwdlJmSUtMaVJRT3c/public/values");
+		this.treeURL = new URL("https://spreadsheets.google.com/feeds/worksheets/0AjkI1jvOdpNzdEYwZEc5Zk5nbHIwdlJmSUtMaVJRT3c/public/values");
 	}
 
 	public ArrayList<Tree> getTreeMasterList() {
