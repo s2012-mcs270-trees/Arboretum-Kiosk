@@ -26,6 +26,9 @@ import edu.gac.arboretumweb.shared.domain.Bench;
 import edu.gac.arboretumweb.shared.domain.Brick;
 import edu.gac.arboretumweb.shared.domain.DonatedObject;
 import edu.gac.arboretumweb.shared.domain.Tree;
+import edu.gac.arboretumweb.client.*;
+import edu.gac.arboretumweb.server.SpreadsheetRetrieval;
+
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -46,6 +49,8 @@ public class SearchResultsPage implements EntryPoint
 	
 	private RootPanel rootPanel = RootPanel.get();
 	private AbsolutePanel absolutePanel = new AbsolutePanel();
+	private boolean isUpdated = false;
+	private int updateCounter = 0;
 	
 	Searcher searcher = new Searcher();
 	
@@ -89,8 +94,6 @@ public class SearchResultsPage implements EntryPoint
 	
 	public SearchResultsPage()
 	{	  
-		
-		searcher.updateLocalMasterLists();
 	    //The following lines instantiate Column objects that will be added to the DataGrid
 	    commonNameColumn = new Column<DonatedObject, String>(new TextCell())
 	    {
@@ -215,6 +218,16 @@ public class SearchResultsPage implements EntryPoint
 
 	public void show(final SearchParameter searchParameter) 
 	{
+		updateCounter++;
+		
+		if(isUpdated == false){
+			searcher.updateLocalMasterLists();
+			isUpdated = true;
+		} else if (updateCounter > 100){
+			searcher.updateLocalMasterLists();
+			updateCounter = 0;
+		}
+		
 		rootPanel.setSize("1200", "900");
 		rootPanel.add(absolutePanel, 0, 0);
 	    absolutePanel.setSize("1062px", "1001px");

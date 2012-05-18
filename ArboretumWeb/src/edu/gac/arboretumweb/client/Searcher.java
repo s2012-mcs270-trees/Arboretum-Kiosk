@@ -22,7 +22,7 @@ public class Searcher {
 	private AsyncCallback<ArrayList<Tree>> treeUpdater = new AsyncCallback<ArrayList<Tree>>(){
 		@Override
 		public void onFailure(Throwable caught) {	
-			System.out.println("NErrrrrrrrrr! MAH BERKs!");
+			System.out.println("Local tree list update failed.");
 		}
 
 		@Override
@@ -38,7 +38,7 @@ public class Searcher {
 		@Override
 		public void onFailure(Throwable caught) {
 			// TODO Auto-generated method stub	
-			System.out.println("Poo delly");
+			System.out.println("Local bench list update failed.");
 		}
 
 		@Override
@@ -53,8 +53,7 @@ public class Searcher {
 
 		@Override
 		public void onFailure(Throwable caught) {
-			//Then, well... shit
-			System.out.println("Shit's fucked, yo");
+			System.out.println("Local brick list update failed.");
 		}
 
 		@Override
@@ -64,6 +63,7 @@ public class Searcher {
 		}
 		
 	};
+	
 	
 	public void updateLocalMasterLists(){
 		masterListRetrieval.getTreeMasterList(treeUpdater);
@@ -77,7 +77,12 @@ public class Searcher {
 		
 		if(sp.getSearchTypeAsString() == null){
 			return updatedTreeList;
+		} 
+		
+		else if (updatedTreeList == null){
+			return accumulatorList;
 		}
+		
 		else if(sp.getSearchTypeAsString() == "Common Name"){
 			for(Tree loopTree:updatedTreeList){
 				if((loopTree).getCommonName().toLowerCase().contains(sp.getKeywordQuery().toLowerCase())   ){
@@ -133,6 +138,10 @@ public class Searcher {
 			return updatedBenchList;
 		}	
 		
+		else if (updatedBenchList == null){
+			return accumulatorList;
+		}
+		
 		else if(sp.getSearchTypeAsString() == "Donated For"){
 			for(Bench loopBench:updatedBenchList){
 				if((loopBench).getDonatedFor().toLowerCase().contains(sp.getKeywordQuery().toLowerCase())){
@@ -165,6 +174,10 @@ public class Searcher {
 		if(sp.getSearchTypeAsString() == null){
 			return updatedBrickList;
 		}	
+		
+		else if (updatedBrickList == null){
+			return accumulatorList;
+		}
 		
 		else if(sp.getSearchTypeAsString() == "Donated For"){
 			for(Brick loopBrick:updatedBrickList){

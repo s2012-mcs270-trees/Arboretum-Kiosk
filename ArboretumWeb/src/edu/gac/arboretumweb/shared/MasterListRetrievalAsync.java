@@ -15,5 +15,6 @@ public interface MasterListRetrievalAsync {
 	void getBrickMasterList(AsyncCallback<ArrayList<Brick>> callback);
 
 	void getTreeMasterList(AsyncCallback<ArrayList<Tree>> callback);
+	
 
 }

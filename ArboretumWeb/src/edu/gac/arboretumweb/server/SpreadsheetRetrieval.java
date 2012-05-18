@@ -12,6 +12,7 @@ import com.google.gdata.data.spreadsheet.ListFeed;
 import com.google.gdata.data.spreadsheet.WorksheetEntry;
 import com.google.gdata.data.spreadsheet.WorksheetFeed;
 import com.google.gdata.util.ServiceException;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import edu.gac.arboretumweb.shared.MasterListRetrieval;
@@ -24,9 +25,9 @@ MasterListRetrieval {
 	 * 
 	 */
 	private static final long serialVersionUID = -5367523128487203951L;
-	public ArrayList<Tree> treeMasterList;
+	private ArrayList<Tree> treeMasterList;
 	private ArrayList<Brick> brickMasterList;
-	public ArrayList<Bench> benchMasterList;
+	private ArrayList<Bench> benchMasterList;
 	private URL treeURL;
 
 	//class used to update all master lists from the google spreadsheet
@@ -211,8 +212,35 @@ MasterListRetrieval {
 		}
 
 	}
-	public SpreadsheetRetrieval() throws MalformedURLException {
+	public SpreadsheetRetrieval() throws MalformedURLException{
 		this.treeURL = new URL("https://spreadsheets.google.com/feeds/worksheets/0AjkI1jvOdpNzdEYwZEc5Zk5nbHIwdlJmSUtMaVJRT3c/public/values");
+//		Tree sampTree = new Tree();
+//		sampTree.setCommonName("oak");
+//		treeMasterList.add(sampTree);
+		try {
+			this.updateMasterLists();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		new Timer(){
+			@Override
+			public void run() {
+				try {
+					updateMasterLists();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ServiceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}.scheduleRepeating(86400000);
 	}
 
 	public ArrayList<Tree> getTreeMasterList() {

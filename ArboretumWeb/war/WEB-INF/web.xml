@@ -7,6 +7,16 @@
 
   <!-- Servlets -->
   
+  <servlet>
+    <servlet-name>updateListsServlet</servlet-name>
+    <servlet-class>edu.gac.arboretumweb.server.SpreadsheetRetrieval</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>updateListsServlet</servlet-name>
+    <url-pattern>/arboretumweb/MasterListRetrieval</url-pattern>
+  </servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>ArboretumWeb.html</welcome-file>
