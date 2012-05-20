@@ -4,8 +4,8 @@ import edu.gac.arboretumweb.client.SearchParameter.Quadrant;
 
 public class DonatedObject {
 
-	protected String yearDonated;
-	protected String donatedFor;
+	public String yearDonated;
+	public String donatedFor;
 
 	public String getYearDonated() 
 	{

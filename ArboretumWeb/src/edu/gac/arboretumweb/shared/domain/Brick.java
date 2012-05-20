@@ -15,10 +15,10 @@ public class Brick extends DonatedObject implements Serializable {
      * used for debugging purposes
      */
     public Brick() {
-    	this.setDistance("1");
-    	this.setDonatedFor("Captian Morgan");
-    	this.setSize("Massive");
-    	this.setYearDonated("1999");
+//    	this.setDistance("1");
+//    	this.setDonatedFor("Captian Morgan");
+//    	this.setSize("Massive");
+//    	this.setYearDonated("1999");
     }
 
 	public String getSize() {

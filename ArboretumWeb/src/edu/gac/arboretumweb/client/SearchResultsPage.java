@@ -1,6 +1,7 @@
 package edu.gac.arboretumweb.client;
 
 import java.util.ArrayList;
+
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -26,12 +27,10 @@ import edu.gac.arboretumweb.shared.domain.Bench;
 import edu.gac.arboretumweb.shared.domain.Brick;
 import edu.gac.arboretumweb.shared.domain.DonatedObject;
 import edu.gac.arboretumweb.shared.domain.Tree;
-import edu.gac.arboretumweb.client.*;
-import edu.gac.arboretumweb.server.SpreadsheetRetrieval;
-
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Image;
 
 public class SearchResultsPage implements EntryPoint
 {
@@ -49,14 +48,14 @@ public class SearchResultsPage implements EntryPoint
 	
 	private RootPanel rootPanel = RootPanel.get();
 	private AbsolutePanel absolutePanel = new AbsolutePanel();
-	private boolean isUpdated = false;
-	private int updateCounter = 0;
+	
+	Image image;
 	
 	Searcher searcher = new Searcher();
 	
-//	List<DonatedObject> sampleTreelist;
-//	List<DonatedObject> sampleBenchList;
-//	List<DonatedObject> sampleBrickList;
+	ArrayList<DonatedObject> sampleTreeList = new ArrayList<DonatedObject>();
+	ArrayList<DonatedObject> sampleBenchList = new ArrayList<DonatedObject>();
+	ArrayList<DonatedObject> sampleBrickList = new ArrayList<DonatedObject>();
 	
     CheckBox checkBoxQuadrantA = new CheckBox("A");
     CheckBox checkBoxQuadrantB = new CheckBox("B");
@@ -92,8 +91,34 @@ public class SearchResultsPage implements EntryPoint
 	Button updateSearchButton = new Button("UPDATE SEARCH CRITERIA");
 	Button backButton = new Button("BACK");
 	
+	@Override
+	/**
+	 * @wbp.parser.entryPoint
+	 */
+	public void onModuleLoad() 
+	{
+		//This method of calling calling the page is used only for debugging purposes (GWT Designer).  The SearchResultsPage will actually
+		//be instantiated by the PageController which will also be responsible for opening it when necessary
+		
+		this.show(new SearchParameter());
+	}
+	
 	public SearchResultsPage()
-	{	  
+	{	
+		rootPanel.setSize("1200", "900");
+	    absolutePanel.setSize("1062px", "1001px");	    
+	    absolutePanel.add(dataGrid, 0, 133);
+	    dataGrid.setSize("1040px", "308px");
+	    
+		searcher.updateLocalMasterLists();
+		
+		for(int i = 0; i < 100; i++)
+		{
+			sampleBenchList.add(new Bench());
+			sampleBrickList.add(new Brick());
+			sampleTreeList.add(new Tree());
+		}
+		
 	    //The following lines instantiate Column objects that will be added to the DataGrid
 	    commonNameColumn = new Column<DonatedObject, String>(new TextCell())
 	    {
@@ -133,7 +158,7 @@ public class SearchResultsPage implements EntryPoint
 	    	@Override
 	    	public String getValue(DonatedObject o)
 	    	{
-	    		return String.valueOf(o.getYearDonated());
+	    		return o.getYearDonated();
 	    	}
 	    };
 	    
@@ -190,6 +215,9 @@ public class SearchResultsPage implements EntryPoint
 	    dataGrid.addColumn(yearDonatedColumn, "Year Donated");	 
 	    dataGrid.addColumn(quadrantColumn, "Quadrant Location");
 	    
+	    //this is displayed when the user hovers the mouse over the gridTable
+	    dataGrid.setTitle("Search Results");
+	    
 	    byListBox.addItem("Donated For");
 	    byListBox.addItem("Common Name");
 	    byListBox.addItem("Scientific Name");
@@ -200,81 +228,6 @@ public class SearchResultsPage implements EntryPoint
 	    inListBox.addItem("Bricks");
 	    inListBox.setSize("117px", "22px");
 	    inListBox.setVisibleItemCount(1);
-	}
-	
-	@Override
-	/**
-	 * @wbp.parser.entryPoint
-	 */
-	public void onModuleLoad() 
-	{
-		//This method of calling calling the page is used only for debugging purposes (GWT Designer).  The SearchResultsPage will actually
-		//be instantiated by the PageController which will also be responsible for opening it when necessary
-		ArrayList<Quadrant> quadrants = new ArrayList<Quadrant>();
-		quadrants.add(Quadrant.E);
-		//SearchParameter searchParameter = new SearchParameter("Grandpa Jo", SearchFor.trees, SearchType.commonName, quadrants);
-		//this.show(searchParameter);
-	}
-
-	public void show(final SearchParameter searchParameter) 
-	{
-		updateCounter++;
-		
-		if(isUpdated == false){
-			searcher.updateLocalMasterLists();
-			isUpdated = true;
-		} else if (updateCounter > 100){
-			searcher.updateLocalMasterLists();
-			updateCounter = 0;
-		}
-		
-		rootPanel.setSize("1200", "900");
-		rootPanel.add(absolutePanel, 0, 0);
-	    absolutePanel.setSize("1062px", "1001px");
-	    
-	    absolutePanel.setVisible(false);
-	    
-	    absolutePanel.add(dataGrid, 0, 133);
-	    dataGrid.setSize("1040px", "308px");
-	    
-//	    sampleTreelist = new ArrayList<DonatedObject>();
-//		for (int i = 0; i < 100; i++)
-//		{
-//			Tree newTree = new Tree();
-//			newTree.setCommonName("Oak" + i);
-//			newTree.setDiameter("16");
-//			newTree.setDonatedBy("Matthew Knutson");
-//			newTree.setDonatedFor("Jesus");
-//			newTree.setHealth("Great");
-//			newTree.setLatitude("10.30");
-//			newTree.setLongitude("15.50");
-//			newTree.setScientificName("Oakas Burillus");
-//			newTree.setYearDonated(1950 + i);
-//			newTree.setYearPlanted("1998");
-//			sampleTreelist.add(newTree);
-//		}
-//		sampleBenchList = new ArrayList<DonatedObject>();
-//		for (int i = 0; i < 100; i++)
-//		{
-//			sampleBenchList.add(new Bench());
-//		}
-//		sampleBrickList = new ArrayList<DonatedObject>();
-//		for(int i = 0; i < 100; i++)
-//		{
-//			sampleBrickList.add(new Brick());
-//		}
-	    
-	    configureColumnsBasedOnSearchParameter(searchParameter);
-	    
-	    if(searchParameter.getSearchFor() == SearchFor.benches)
-	    {
-	    	if(!(dataGrid.getColumnIndex(commonNameColumn) == -1))//
-	    	{
-	    		dataGrid.removeColumn(commonNameColumn);
-	    		dataGrid.removeColumn(scientificNameColumn);
-	    		dataGrid.addColumn(benchTypeColumn, "Bench Type");
-	    	}
-	    }
 	    
 	    //adding the items to the listBox 
 	    absolutePanel.add(byListBox, 427, 52);
@@ -301,8 +254,79 @@ public class SearchResultsPage implements EntryPoint
 	    locatedInQuadrantLabel.setSize("121px", "24px");
 	    absolutePanel.add(searchKeywordsTextBox, 149, 10);
 	    searchKeywordsTextBox.setSize("222px", "12px");
-		
-		absolutePanel.setVisible(true);
+	    
+	    absolutePanel.add(updateSearchButton, 839, 24);
+	    updateSearchButton.setSize("173px", "81px");
+	    
+	    //Add the association  ClickHandler to the updateSearchButton
+	    updateSearchButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) 
+			{
+				//TODO: check to make sure the current configuration is acceptable and searchable
+				// this could be done in realtime by displaying some red text when the current configuration is not correct
+				// or it could be checked when this method is run then told to the user by displaying a window
+    			if(currentConfigurationIsAcceptable())
+    			{
+    				SearchParameter newParam = extractSearchParameterFromConfiguration();
+        			configureColumnsBasedOnSearchParameter(newParam);			
+    			}
+			}
+	    });
+	    
+	    absolutePanel.add(backButton, 839, 494);
+	    backButton.setSize("173px", "81px");
+	    backButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event)
+			{
+				rootPanel.clear();
+    			PageController.sharedPageController().showMainPage();
+			}
+		});
+	    
+	    // Add a selection model to handle the user clicking or touching a row selection 
+	    // (corresponding to a tree being selected, 'selectedTree')
+	    final SingleSelectionModel<DonatedObject> selectionModel = new SingleSelectionModel<DonatedObject>();
+	    dataGrid.setSelectionModel(selectionModel);
+	    
+	    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() 
+	    {
+	    	public void onSelectionChange(SelectionChangeEvent event) 
+	    	{
+	    		DonatedObject selectedObject= selectionModel.getSelectedObject();
+	    		if (selectedObject != null) 
+	    		{
+	    			rootPanel.clear();
+	    			SearchParameter searchParameter = extractSearchParameterFromConfiguration(); 
+	    			if(selectedObject instanceof Tree)
+	    			{
+	    				PageController.sharedPageController().showTreePage((Tree)selectedObject, searchParameter);
+	    			}
+	    			if(selectedObject instanceof Bench)
+	    			{
+	    				PageController.sharedPageController().showBenchPage((Bench)selectedObject, searchParameter);
+	    			}
+	    			if(selectedObject instanceof Brick)
+	    			{
+	    				PageController.sharedPageController().showBrickPage((Brick)selectedObject, searchParameter);
+	    			}
+	    		}
+	    	}
+	    });
+	}
+
+	public void show(final SearchParameter searchParameter) 
+	{	    
+		//ultimately responsible for the SearchResultsPage (which is basically just this absolute panel) being 
+		// shown on the screen
+		rootPanel.add(absolutePanel, 0, 0);
+				
+		rootPanel.add(image, 54, 44);
+		image.setSize("100px", "100px");
+	    
+		// Sets up which columns to display for Trees, Benches, or Bricks since each
+	    // selection shows different columns. Also sets up the data for each row based
+	    // on the ArrayList that is returned by the searcher
+	    configureColumnsBasedOnSearchParameter(searchParameter);
 				
 		searchKeywordsTextBox.setText(searchParameter.getKeywordQuery());
 	    	    	    	    
@@ -348,15 +372,6 @@ public class SearchResultsPage implements EntryPoint
 //	        return ((Tree)tree1).getCommonName().compareTo(((Tree)tree2).getCommonName());
 //	      }
 //	    });
-	    	    
-	    //The dataGrid was instantiated with it's generic type "Tree", thus it's row data must consist of an ArrayList of Trees
-//	    dataGrid.setRowData(sampleTreelist);
-
-	    //documentation says this isn't mandatory but is suggested
-	    //dataGrid.setRowCount(sampleTreelist.size());
-
-	    //this is displayed when the user hovers the mouse over the gridTable
-	    dataGrid.setTitle("Search Results");
 
 	    // This sets how many results should be displayed on one page.  Currently, it limits how many results 
 	    // will be shown in the grid and ignore all other results.  For example, the mock ArrayList<Tree> sampleTreelist
@@ -367,126 +382,7 @@ public class SearchResultsPage implements EntryPoint
 	    
 	    //not sure what this does
 	    //pager.setDisplay(dataGrid);
-	    
-	    absolutePanel.add(updateSearchButton, 839, 24);
-	    updateSearchButton.setSize("173px", "81px");
-	    //Add the association  ClickHandler to the updateSearchButton
-	    updateSearchButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) 
-			{
-				//TODO: check to make sure the current configuration is acceptable and searchable
-				// this could be done in realtime by displaying some red text when the current configuration is not correct
-				// or it could be checked when this method is run then told to the user by displaying a window
-    			if(currentConfigurationIsAcceptable())
-    			{
-    				SearchFor searchFor = SearchFor.trees;
-        			
-        			if(inListBox.getItemText(inListBox.getSelectedIndex()).equals("Trees"))
-        		    	searchFor = SearchFor.trees;
-        			if(inListBox.getItemText(inListBox.getSelectedIndex()).equals("Benches"))
-        		    	searchFor = SearchFor.benches;
-        			if(inListBox.getItemText(inListBox.getSelectedIndex()).equals("Bricks"))
-        		    	searchFor = SearchFor.bricks;
-        			        			
-        		    SearchType searchType = SearchType.commonName;
-        		    
-        		    if(byListBox.getItemText(byListBox.getSelectedIndex()).equals("Donated For"))
-        		    	searchType = SearchType.donatedFor;
-        		    if(byListBox.getItemText(byListBox.getSelectedIndex()).equals("Common Name"))
-        		    	searchType = SearchType.commonName;
-        		    if(byListBox.getItemText(byListBox.getSelectedIndex()).equals("Scientific Name"))
-        		    	searchType = SearchType.scientificName;
-        		    
-        		    ArrayList<Quadrant> quadrants = new ArrayList<Quadrant>();
-        		    
-        		    if(checkBoxQuadrantA.getValue())
-        		    	quadrants.add(Quadrant.A);
-        		    if(checkBoxQuadrantB.getValue())
-        		    	quadrants.add(Quadrant.B);
-        		    if(checkBoxQuadrantC.getValue())
-        		    	quadrants.add(Quadrant.C);
-        		    if(checkBoxQuadrantD.getValue())
-        		    	quadrants.add(Quadrant.D);
-        		    if(checkBoxQuadrantE.getValue())
-        		    	quadrants.add(Quadrant.E);
-        		    
-        			SearchParameter newParam = new SearchParameter(searchKeywordsTextBox.getText(), 
-        					searchFor, 
-        					searchType, 
-        					quadrants,
-        					false);
-        			        			
-        			rootPanel.clear();//must clear first or there will be duplicates of each UI element
-        			PageController.sharedPageController().showSearchResultsPage(newParam);    				
-    			}
-			}
-
-			private boolean currentConfigurationIsAcceptable() 
-			{
-				if(!checkBoxQuadrantA.getValue() && !checkBoxQuadrantB.getValue() && !checkBoxQuadrantC.getValue() 
-						&& ! checkBoxQuadrantD.getValue() && !checkBoxQuadrantE.getValue())
-				{
-					Window.alert("At least one quadrant must be selected.");
-					return false;
-				}
-				if(inListBox.getSelectedIndex() == -1)//I don't think this is possible using dropdown box, but included to be safe
-				{
-					Window.alert("At least one of \"Trees\", \"Benches\", or \"Bricks\" must be selected.");
-					return false;
-				}
-				String searchInSelectedText = inListBox.getItemText(inListBox.getSelectedIndex());
-				String searchForSelectedText = byListBox.getItemText(byListBox.getSelectedIndex());
-				
-				if((searchInSelectedText.equals("Benches") || searchInSelectedText.equals("Bricks")) 
-						&& searchForSelectedText.equals("Common Name") || searchForSelectedText.equals("Scientific Name"))
-				{
-					Window.alert("Cannot search by \"Common Name\" or \"Scientific Name\" when \"Bricks\" or " +
-							"\"Benches\" is selected.");
-					return false;
-				}
-				return true;
-			}
-		});
-	    	    	    	    
-	    // Add a selection model to handle the user clicking or touching a row selection 
-	    // (corresponding to a tree being selected, 'selectedTree')
-	    final SingleSelectionModel<DonatedObject> selectionModel = new SingleSelectionModel<DonatedObject>();
-	    dataGrid.setSelectionModel(selectionModel);
-	    
-	    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() 
-	    {
-	    	public void onSelectionChange(SelectionChangeEvent event) 
-	    	{
-	    		DonatedObject selectedObject= selectionModel.getSelectedObject();
-	    		if (selectedObject != null) 
-	    		{
-	    			rootPanel.clear();
-	    			if(selectedObject instanceof Tree)
-	    			{
-	    				PageController.sharedPageController().showTreePage((Tree)selectedObject, searchParameter);
-	    			}
-	    			if(selectedObject instanceof Bench)
-	    			{
-	    				
-	    			}
-	    			if(selectedObject instanceof Brick)
-	    			{
-	    				
-	    			}
-	    		}
-	    	}
-	    });
-	    	    
-	    absolutePanel.add(backButton, 839, 494);
-	    backButton.setSize("173px", "81px");
-	    backButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event)
-			{
-				rootPanel.clear();
-    			PageController.sharedPageController().showMainPage();
-			}
-		});
-		    
+	    	    	    	    	    	    		    
 	    // Create a Pager to control the table.  This came straight from the example
 	    // I followed. I don't believe it adds any functionality to our project at all.
 	    // However, I kept it hoping that it was somehow responsible for paging our results
@@ -502,14 +398,15 @@ public class SearchResultsPage implements EntryPoint
 	{
 		if(searchParameter.getSearchFor() == SearchFor.trees)
 		{
-			dataGrid.setRowData(searcher.searchResultsForTreeSearch(searchParameter));
-			if(dataGrid.getColumnIndex(commonNameColumn) == -1)//dataGrid does not contain commonNameColumn
+			ArrayList<Tree> trees = searcher.searchResultsForTreeSearch(searchParameter);
+			dataGrid.setRowData(trees);
+			if(dataGrid.getColumnIndex(scientificNameColumn) == -1)//dataGrid does not contain commonNameColumn
 			{
-				dataGrid.addColumn(commonNameColumn, "Common Name");
+				dataGrid.insertColumn(0, scientificNameColumn, "Scientific Name");
 			}
-			if(dataGrid.getColumnIndex(scientificNameColumn) == -1)
+			if(dataGrid.getColumnIndex(commonNameColumn) == -1)
 			{
-				dataGrid.addColumn(scientificNameColumn, "Scientific Name");
+				dataGrid.insertColumn(0, commonNameColumn, "Common Name");
 			}
 			if(!(dataGrid.getColumnIndex(benchTypeColumn) == -1))
 			{
@@ -523,10 +420,12 @@ public class SearchResultsPage implements EntryPoint
 			{
 				dataGrid.removeColumn(brickSizeColumn);
 			}		
+			setupMapForTrees(trees);
 		}
 		if(searchParameter.getSearchFor() == SearchFor.benches)
 		{
-			dataGrid.setRowData(searcher.searchResultsForBenchSearch(searchParameter));
+			ArrayList<Bench> benches = searcher.searchResultsForBenchSearch(searchParameter);
+			dataGrid.setRowData(sampleBenchList);
 			if(!(dataGrid.getColumnIndex(commonNameColumn) == -1))
 			{
 				dataGrid.removeColumn(commonNameColumn);
@@ -547,10 +446,14 @@ public class SearchResultsPage implements EntryPoint
 			{
 				dataGrid.removeColumn(brickSizeColumn);
 			}
+			setupMapForBenches(benches);
+			//documentation says this isn't mandatory but is suggested
+		    //dataGrid.setRowCount(sampleTreelist.size());
 		}
 		if(searchParameter.getSearchFor() == SearchFor.bricks)
 		{
-			dataGrid.setRowData(searcher.searchResultsForBrickSearch(searchParameter));
+			//searcher.searchResultsForBrickSearch(searchParameter)
+			dataGrid.setRowData(sampleBrickList);
 			if(!(dataGrid.getColumnIndex(commonNameColumn) == -1))
 			{
 				dataGrid.removeColumn(commonNameColumn);
@@ -573,5 +476,103 @@ public class SearchResultsPage implements EntryPoint
 			}
 		}
 		dataGrid.redraw();
+	}
+	
+	private void setupMapForTrees(ArrayList<Tree> sampleTreeList2) 
+	{
+		String baseString = "http://maps.googleapis.com/maps/api/staticmap?center=C44.323526,%-93.973789&zoom=15&size=512x512&maptype=" 
+	+ "hybrid&markers=color:blue%7Clabel:S%7C44.323526,-93.973789";
+		for(Tree tree:sampleTreeList2)
+		{
+			String appendingString= "&markers=color:green%7Clabel:S%7C" + tree.getLatitude() + ", " 
+					+ tree.getLongitude();
+
+			baseString += appendingString;
+		}
+		baseString += "&sensor=false";
+		
+		image.setUrl(baseString);
+	}
+	
+	private void setupMapForBenches(ArrayList<Bench> benches) 
+	{
+		String baseString = "http://maps.googleapis.com/maps/api/staticmap?center=C44.323526,%-93.973789&zoom=15&size=512x512&maptype=" 
+	+ "hybrid&markers=color:blue%7Clabel:S%7C44.323526,-93.973789";
+		for(Bench bench:benches)
+		{
+			String appendingString= "&markers=color:green%7Clabel:S%7C" + bench.getLatitude() + ", " 
+					+ bench.getLongitude();
+
+			baseString += appendingString;
+		}
+		baseString += "&sensor=false";
+		
+		image.setUrl(baseString);
+	}
+
+	private boolean currentConfigurationIsAcceptable() 
+	{
+		if(!checkBoxQuadrantA.getValue() && !checkBoxQuadrantB.getValue() && !checkBoxQuadrantC.getValue() 
+				&& ! checkBoxQuadrantD.getValue() && !checkBoxQuadrantE.getValue())
+		{
+			Window.alert("At least one quadrant must be selected.");
+			return false;
+		}
+		if(inListBox.getSelectedIndex() == -1)//I don't think this is possible using dropdown box, but included to be safe
+		{
+			Window.alert("At least one of \"Trees\", \"Benches\", or \"Bricks\" must be selected.");
+			return false;
+		}
+		String searchInSelectedText = inListBox.getItemText(inListBox.getSelectedIndex());
+		String searchForSelectedText = byListBox.getItemText(byListBox.getSelectedIndex());
+		
+		if((searchInSelectedText.equals("Benches") || searchInSelectedText.equals("Bricks")) 
+				&& searchForSelectedText.equals("Common Name") || searchForSelectedText.equals("Scientific Name"))
+		{
+			Window.alert("Cannot search by \"Common Name\" or \"Scientific Name\" when \"Bricks\" or " +
+					"\"Benches\" is selected.");
+			return false;
+		}
+		return true;
+	}
+	
+	private SearchParameter extractSearchParameterFromConfiguration() {
+		SearchFor searchFor = SearchFor.trees;
+		
+		if(inListBox.getItemText(inListBox.getSelectedIndex()).equals("Trees"))
+			searchFor = SearchFor.trees;
+		if(inListBox.getItemText(inListBox.getSelectedIndex()).equals("Benches"))
+			searchFor = SearchFor.benches;
+		if(inListBox.getItemText(inListBox.getSelectedIndex()).equals("Bricks"))
+			searchFor = SearchFor.bricks;
+		        			
+		SearchType searchType = SearchType.commonName;
+		
+		if(byListBox.getItemText(byListBox.getSelectedIndex()).equals("Donated For"))
+			searchType = SearchType.donatedFor;
+		if(byListBox.getItemText(byListBox.getSelectedIndex()).equals("Common Name"))
+			searchType = SearchType.commonName;
+		if(byListBox.getItemText(byListBox.getSelectedIndex()).equals("Scientific Name"))
+			searchType = SearchType.scientificName;
+		
+		ArrayList<Quadrant> quadrants = new ArrayList<Quadrant>();
+		
+		if(checkBoxQuadrantA.getValue())
+			quadrants.add(Quadrant.A);
+		if(checkBoxQuadrantB.getValue())
+			quadrants.add(Quadrant.B);
+		if(checkBoxQuadrantC.getValue())
+			quadrants.add(Quadrant.C);
+		if(checkBoxQuadrantD.getValue())
+			quadrants.add(Quadrant.D);
+		if(checkBoxQuadrantE.getValue())
+			quadrants.add(Quadrant.E);
+		
+		SearchParameter newParam = new SearchParameter(searchKeywordsTextBox.getText(), 
+				searchFor, 
+				searchType, 
+				quadrants,
+				false);
+		return newParam;
 	}
 }

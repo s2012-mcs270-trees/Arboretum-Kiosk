@@ -25,16 +25,6 @@ public class Tree extends DonatedObject implements Serializable{
     //default constructor for debugging and to ensure that all trees created have specified fields
     public Tree() 
     {
-    	super.setYearDonated("1990");
-    	commonName = "White Oak";
-    	scientificName = "Quercus alba";
-    	yearPlanted = "1999";
-    	health = "good";
-    	longitude = 93.9578;
-    	latitude = 44.3236;
-    	diameter = "2.2";
-    	donatedFor = "Mark Johnson";
-    	this.setQuadrant();
     }
     
     public static void main(String[] args) {
@@ -68,6 +58,7 @@ public class Tree extends DonatedObject implements Serializable{
 	public void setYearDonated(String yearDonated) {
 		this.yearDonated = yearDonated;
 	}
+	
 
 	public String getHealth() {
 		return health;
@@ -109,7 +100,7 @@ public class Tree extends DonatedObject implements Serializable{
 		this.donatedFor = donatedFor;
 	}
 	
-	private void setQuadrant()
+	public void setQuadrant()
 	{
 		double latitude = this.getLatitude();
 		double longitude = this.getLongitude();

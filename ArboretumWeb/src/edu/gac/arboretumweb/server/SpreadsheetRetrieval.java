@@ -110,6 +110,7 @@ MasterListRetrieval {
 						tree.setDonatedFor(donatedFor);
 					}
 			}
+			tree.setQuadrant();
 			this.treeMasterList.add(tree);
 		}
 
@@ -172,6 +173,7 @@ MasterListRetrieval {
 					bench.setDonatedFor(donatedFor);
 				}
 			}
+			bench.setQuadrant();
 			this.benchMasterList.add(bench);
 		}
 
@@ -226,21 +228,6 @@ MasterListRetrieval {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		new Timer(){
-			@Override
-			public void run() {
-				try {
-					updateMasterLists();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ServiceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}.scheduleRepeating(86400000);
 	}
 
 	public ArrayList<Tree> getTreeMasterList() {

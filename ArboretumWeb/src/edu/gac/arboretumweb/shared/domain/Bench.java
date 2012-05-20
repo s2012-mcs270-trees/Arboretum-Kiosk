@@ -17,12 +17,12 @@ public class Bench extends DonatedObject implements Serializable {
     
     public Bench ()
     {
-    	this.setDonatedFor("Michael Jackson");
-    	this.setLatitude(94.3345);
-    	this.setLongitude(69.696969);
-    	this.setType("An awesome one");
-    	this.setYearDonated("1849");
-    	this.setQuadrant();//set quadrants based on lat/long that was initialized
+//    	this.setDonatedFor("Michael Jackson");
+//    	this.setLatitude(94.3345);
+//    	this.setLongitude(69.696969);
+//    	this.setType("An awesome one");
+//    	this.setYearDonated("1849");
+//    	this.setQuadrant();//set quadrants based on lat/long that was initialized
     }
     
     public String getBenchType() {
@@ -45,7 +45,7 @@ public class Bench extends DonatedObject implements Serializable {
 		this.latitude = d;
 	}
 	
-	private void setQuadrant()
+	public void setQuadrant()
 	{
 		double latitude = this.getLatitude();
 		double longitude = this.getLongitude();

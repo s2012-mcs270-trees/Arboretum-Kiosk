@@ -61,9 +61,9 @@ public class MainPage implements EntryPoint, ClickHandler {
 	
 	final TextBox searchField = new TextBox();
 	
-	Label labelIn = new InlineLabel("In");
-	Label labelBy = new InlineLabel("By");
-	Label labelQuery = new InlineLabel("Query");
+	Label labelIn = new InlineLabel("Search For:");
+	Label labelBy = new InlineLabel("Search By:");
+	Label labelQuery = new InlineLabel("Keyword:");
 	Label labelHeader = new InlineLabel("Welcome to the Gustavus Adolphus College Arboretum Tree Search Application!");
 	Label labelLocatedInQuadrant = new Label("Located In Quadrant(s)");
 	

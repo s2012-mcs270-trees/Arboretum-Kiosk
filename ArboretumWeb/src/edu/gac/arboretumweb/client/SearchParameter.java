@@ -68,6 +68,29 @@ public class SearchParameter
 	private ArrayList<Quadrant> quadrants;
 	private boolean undonatedBoxChecked;
 
+	/**
+	 * A default constructor used for debugging and testing purposes
+	 * 
+	 */
+	public SearchParameter()
+	{
+		ArrayList<Quadrant> quadrants = new ArrayList<Quadrant>();
+		quadrants.add(Quadrant.E);
+		this.keywordQuery = "Grandpa Jo";
+		this.searchFor = SearchFor.trees;
+		this.searchType = SearchType.commonName;
+		this.quadrants = quadrants;
+		this.undonatedBoxChecked = false;
+	}
+	
+	/**
+	 * 
+	 * @param keywordQuery
+	 * @param searchFor
+	 * @param searchType
+	 * @param quadrants
+	 * @param unDonatedBoxChecked
+	 */
 	public SearchParameter(String keywordQuery, 
 			SearchFor searchFor, 
 			SearchType searchType, 
@@ -80,18 +103,11 @@ public class SearchParameter
 		this.quadrants = quadrants;
 		this.undonatedBoxChecked = unDonatedBoxChecked;
 	}
-	//public SearchParameter(String string, SearchFor trees,
-	//		SearchType commonname, ArrayList<Quadrant> quadrants) {
-		// TODO Auto-generated constructor stub
-	//}
+	
 	public boolean isUndonatedBoxChecked(){
 		return undonatedBoxChecked;
 	}
-	public void setUndonatedBoxChecked(boolean setBoxTo){
-		undonatedBoxChecked=setBoxTo;
-	}
 	
-
 	public String getKeywordQuery()
 	{
 		return keywordQuery;
