@@ -1,0 +1,2 @@
+serviceClass: edu.gac.arboretumweb.shared.MasterListRetrieval
+path: 25A65D192205E5FB5A9943B2FF5B44DF.gwt.rpc
